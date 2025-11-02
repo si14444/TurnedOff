@@ -15,12 +15,16 @@ export const Colors = {
     primaryHover: '#475569',      // Darker slate for hover states
     primaryActive: '#334155',     // Even darker for active/pressed states
     onPrimary: '#FFFFFF',         // Text/icons on primary color
+    primaryContainer: '#F1F5F9',  // Background for elements related to primary
+    onPrimaryContainer: '#334155',// Text on primary container
 
     // Secondary Colors - Supporting actions
     secondary: '#78716C',         // Warm gray - Secondary actions
     secondaryHover: '#57534E',    // Darker warm gray
     secondaryActive: '#44403C',   // Darkest warm gray
     onSecondary: '#FFFFFF',       // Text/icons on secondary color
+    secondaryContainer: '#E7E5E4',// Background for elements related to secondary
+    onSecondaryContainer: '#44403C',// Text on secondary container
 
     // Tertiary Colors - Accent elements
     tertiary: '#94A3B8',          // Light slate - Subtle accents
@@ -94,12 +98,16 @@ export const Colors = {
     primaryHover: '#CBD5E1',      // Lighter on hover
     primaryActive: '#E2E8F0',     // Lightest on active
     onPrimary: '#0F172A',         // Dark text on primary
+    primaryContainer: '#334155',  // Background for elements related to primary
+    onPrimaryContainer: '#E2E8F0',// Text on primary container
 
     // Secondary Colors
     secondary: '#A8A29E',         // Lighter warm gray
     secondaryHover: '#D6D3D1',    // Lighter on hover
     secondaryActive: '#E7E5E4',   // Lightest on active
     onSecondary: '#1C1917',       // Dark text on secondary
+    secondaryContainer: '#44403C',// Background for elements related to secondary
+    onSecondaryContainer: '#E7E5E4',// Text on secondary container
 
     // Tertiary Colors
     tertiary: '#64748B',          // Medium slate
@@ -171,6 +179,14 @@ export const Colors = {
 // TYPOGRAPHY
 // ============================================================================
 
+const fontWeights = {
+  light: '300',
+  regular: '400',
+  medium: '500',
+  semibold: '600',
+  bold: '700',
+} as const;
+
 export const Typography = {
   // Font Families
   fontFamily: {
@@ -192,13 +208,7 @@ export const Typography = {
   },
 
   // Font Weights
-  fontWeight: {
-    light: '300',
-    regular: '400',
-    medium: '500',
-    semibold: '600',
-    bold: '700',
-  },
+  fontWeight: fontWeights,
 
   // Line Heights
   lineHeight: {
@@ -223,98 +233,96 @@ export const Typography = {
   styles: {
     displayLarge: {
       fontSize: 48,
-      fontWeight: '700',
+      fontWeight: fontWeights.bold,
       lineHeight: 1.2,
       letterSpacing: -0.025,
     },
     displayMedium: {
       fontSize: 36,
-      fontWeight: '700',
+      fontWeight: fontWeights.bold,
       lineHeight: 1.2,
       letterSpacing: -0.025,
     },
     displaySmall: {
       fontSize: 30,
-      fontWeight: '700',
+      fontWeight: fontWeights.bold,
       lineHeight: 1.2,
       letterSpacing: -0.025,
     },
     headlineLarge: {
       fontSize: 24,
-      fontWeight: '600',
+      fontWeight: fontWeights.semibold,
       lineHeight: 1.375,
       letterSpacing: -0.025,
     },
     headlineMedium: {
       fontSize: 20,
-      fontWeight: '600',
+      fontWeight: fontWeights.semibold,
       lineHeight: 1.375,
       letterSpacing: 0,
     },
     headlineSmall: {
       fontSize: 18,
-      fontWeight: '600',
+      fontWeight: fontWeights.semibold,
       lineHeight: 1.375,
       letterSpacing: 0,
     },
     titleLarge: {
       fontSize: 20,
-      fontWeight: '500',
+      fontWeight: fontWeights.medium,
       lineHeight: 1.5,
       letterSpacing: 0,
     },
     titleMedium: {
       fontSize: 16,
-      fontWeight: '500',
+      fontWeight: fontWeights.medium,
       lineHeight: 1.5,
       letterSpacing: 0.015,
     },
     titleSmall: {
       fontSize: 14,
-      fontWeight: '500',
+      fontWeight: fontWeights.medium,
       lineHeight: 1.5,
       letterSpacing: 0.015,
     },
     bodyLarge: {
       fontSize: 18,
-      fontWeight: '400',
+      fontWeight: fontWeights.regular,
       lineHeight: 1.5,
       letterSpacing: 0,
     },
     bodyMedium: {
       fontSize: 16,
-      fontWeight: '400',
+      fontWeight: fontWeights.regular,
       lineHeight: 1.5,
       letterSpacing: 0,
     },
     bodySmall: {
       fontSize: 14,
-      fontWeight: '400',
+      fontWeight: fontWeights.regular,
       lineHeight: 1.5,
       letterSpacing: 0,
     },
     labelLarge: {
       fontSize: 16,
-      fontWeight: '600',
+      fontWeight: fontWeights.semibold,
       lineHeight: 1.5,
       letterSpacing: 0.025,
     },
     labelMedium: {
       fontSize: 14,
-      fontWeight: '600',
+      fontWeight: fontWeights.semibold,
       lineHeight: 1.5,
       letterSpacing: 0.025,
     },
     labelSmall: {
       fontSize: 12,
-      fontWeight: '600',
+      fontWeight: fontWeights.semibold,
       lineHeight: 1.375,
       letterSpacing: 0.05,
     },
   },
-};
-
-// ============================================================================
+};// ============================================================================
 // SPACING
 // ============================================================================
 

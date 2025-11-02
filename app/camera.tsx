@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useRef } from 'react';
-import { View, Text, Pressable, Alert, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Alert, StyleSheet, Image } from 'react-native';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -89,7 +89,7 @@ export default function CameraScreen() {
     if (!capturedPhoto || !itemId) return;
 
     try {
-      const photosDir = `${FileSystem.documentDirectory}photos/`;
+      const photosDir = `${(FileSystem as any).documentDirectory}photos/`;
       const dirInfo = await FileSystem.getInfoAsync(photosDir);
 
       if (!dirInfo.exists) {
@@ -122,10 +122,10 @@ export default function CameraScreen() {
       {/* Camera View or Preview */}
       {capturedPhoto ? (
         <View style={styles(theme).previewContainer}>
-          <img
-            src={capturedPhoto}
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-            alt="Preview"
+          <Image
+            source={{ uri: capturedPhoto }}
+            style={{ width: '100%', height: '100%' }}
+            resizeMode="contain"
           />
         </View>
       ) : (
