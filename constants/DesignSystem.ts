@@ -1,153 +1,169 @@
 /**
  * TurnedOff Design System
- * Sophisticated gray-toned design system with modern aesthetics
+ * Semantic design system with purpose-driven naming
  */
 
 // ============================================================================
-// COLOR PALETTE - Gray Spectrum
+// COLOR SYSTEM - Semantic & Purpose-Driven
 // ============================================================================
 
 export const Colors = {
-  // Base Grays - Neutral Foundation
-  gray: {
-    50: '#FAFAFA',   // Lightest - Backgrounds
-    100: '#F5F5F5',  // Very Light - Subtle backgrounds
-    200: '#EEEEEE',  // Light - Borders, dividers
-    300: '#E0E0E0',  // Light Medium - Disabled states
-    400: '#BDBDBD',  // Medium - Placeholders
-    500: '#9E9E9E',  // True Gray - Secondary text
-    600: '#757575',  // Medium Dark - Body text
-    700: '#616161',  // Dark - Headings
-    800: '#424242',  // Very Dark - Primary text
-    900: '#212121',  // Darkest - Emphasis
+  // Light Mode Colors
+  light: {
+    // Primary Colors - Main brand colors
+    primary: '#64748B',           // Slate - Primary actions, key elements
+    primaryHover: '#475569',      // Darker slate for hover states
+    primaryActive: '#334155',     // Even darker for active/pressed states
+    onPrimary: '#FFFFFF',         // Text/icons on primary color
+
+    // Secondary Colors - Supporting actions
+    secondary: '#78716C',         // Warm gray - Secondary actions
+    secondaryHover: '#57534E',    // Darker warm gray
+    secondaryActive: '#44403C',   // Darkest warm gray
+    onSecondary: '#FFFFFF',       // Text/icons on secondary color
+
+    // Tertiary Colors - Accent elements
+    tertiary: '#94A3B8',          // Light slate - Subtle accents
+    tertiaryHover: '#64748B',     // Medium slate
+    tertiaryActive: '#475569',    // Dark slate
+    onTertiary: '#FFFFFF',        // Text/icons on tertiary color
+
+    // Surface Colors - Backgrounds and containers
+    surface: '#FFFFFF',           // Main surface (cards, sheets)
+    surfaceVariant: '#F8FAFC',    // Variant surface (subtle difference)
+    surfaceContainer: '#F1F5F9',  // Container backgrounds
+    surfaceContainerHigh: '#E2E8F0', // Higher elevation containers
+    onSurface: '#0F172A',         // Text on surface
+    onSurfaceVariant: '#475569',  // Secondary text on surface
+
+    // Background Colors - Screen backgrounds
+    background: '#FFFFFF',        // Main screen background
+    backgroundVariant: '#F8FAFC', // Variant background
+    onBackground: '#0F172A',      // Text on background
+
+    // State Colors - Success, Warning, Error, Info
+    success: '#6B7280',           // Cool gray - Success states
+    onSuccess: '#FFFFFF',         // Text on success
+    successContainer: '#F3F4F6',  // Success background container
+    onSuccessContainer: '#1F2937', // Text on success container
+
+    warning: '#A8A29E',           // Warm gray - Warning states
+    onWarning: '#1C1917',         // Text on warning
+    warningContainer: '#F5F5F4',  // Warning background container
+    onWarningContainer: '#292524', // Text on warning container
+
+    error: '#757575',             // Gray - Error states
+    onError: '#FFFFFF',           // Text on error
+    errorContainer: '#F5F5F5',    // Error background container
+    onErrorContainer: '#212121',  // Text on error container
+
+    info: '#94A3B8',              // Slate - Info states
+    onInfo: '#FFFFFF',            // Text on info
+    infoContainer: '#F1F5F9',     // Info background container
+    onInfoContainer: '#1E293B',   // Text on info container
+
+    // Outline & Border Colors
+    outline: '#E2E8F0',           // Default borders
+    outlineVariant: '#CBD5E1',    // Variant borders (more prominent)
+    outlineStrong: '#94A3B8',     // Strong borders
+
+    // Scrim & Overlay
+    scrim: 'rgba(0, 0, 0, 0.5)',  // Modal/dialog overlay
+    shadow: '#000000',            // Shadow color
+
+    // Disabled States
+    disabled: '#E2E8F0',          // Disabled background
+    onDisabled: '#94A3B8',        // Text on disabled
+
+    // Interactive Elements
+    hover: '#F8FAFC',             // Hover background overlay
+    pressed: '#F1F5F9',           // Pressed background overlay
+    focus: '#64748B',             // Focus ring color
+    ripple: 'rgba(100, 116, 139, 0.12)', // Ripple effect
+
+    // Dividers
+    divider: '#E2E8F0',           // Divider lines
+    dividerSubtle: '#F1F5F9',     // Subtle dividers
+    dividerStrong: '#CBD5E1',     // Strong dividers
   },
 
-  // Warm Grays - Sophisticated warmth
-  warmGray: {
-    50: '#FAFAF9',
-    100: '#F5F5F4',
-    200: '#E7E5E4',
-    300: '#D6D3D1',
-    400: '#A8A29E',
-    500: '#78716C',
-    600: '#57534E',
-    700: '#44403C',
-    800: '#292524',
-    900: '#1C1917',
-  },
-
-  // Cool Grays - Clean, modern feel
-  coolGray: {
-    50: '#F9FAFB',
-    100: '#F3F4F6',
-    200: '#E5E7EB',
-    300: '#D1D5DB',
-    400: '#9CA3AF',
-    500: '#6B7280',
-    600: '#4B5563',
-    700: '#374151',
-    800: '#1F2937',
-    900: '#111827',
-  },
-
-  // Slate Grays - Professional depth
-  slate: {
-    50: '#F8FAFC',
-    100: '#F1F5F9',
-    200: '#E2E8F0',
-    300: '#CBD5E1',
-    400: '#94A3B8',
-    500: '#64748B',
-    600: '#475569',
-    700: '#334155',
-    800: '#1E293B',
-    900: '#0F172A',
-  },
-
-  // Accent Colors - Subtle highlights
-  accent: {
-    primary: '#64748B',      // Slate 500 - Primary actions
-    secondary: '#78716C',    // Warm Gray 500 - Secondary actions
-    success: '#6B7280',      // Cool Gray 500 - Success states
-    warning: '#A8A29E',      // Warm Gray 400 - Warnings
-    error: '#757575',        // Gray 600 - Errors
-    info: '#94A3B8',         // Slate 400 - Information
-  },
-
-  // Semantic Colors
-  semantic: {
-    background: {
-      primary: '#FFFFFF',
-      secondary: '#FAFAFA',
-      tertiary: '#F5F5F5',
-      elevated: '#FFFFFF',
-      overlay: 'rgba(0, 0, 0, 0.5)',
-    },
-    text: {
-      primary: '#212121',
-      secondary: '#616161',
-      tertiary: '#9E9E9E',
-      disabled: '#BDBDBD',
-      inverse: '#FFFFFF',
-    },
-    border: {
-      subtle: '#F5F5F5',
-      default: '#EEEEEE',
-      medium: '#E0E0E0',
-      strong: '#BDBDBD',
-    },
-    interactive: {
-      default: '#64748B',
-      hover: '#475569',
-      active: '#334155',
-      disabled: '#E0E0E0',
-      focus: '#64748B',
-    },
-  },
-
-  // Dark Mode
+  // Dark Mode Colors
   dark: {
-    gray: {
-      50: '#212121',
-      100: '#2C2C2C',
-      200: '#363636',
-      300: '#424242',
-      400: '#525252',
-      500: '#6B6B6B',
-      600: '#9E9E9E',
-      700: '#BDBDBD',
-      800: '#E0E0E0',
-      900: '#F5F5F5',
-    },
-    semantic: {
-      background: {
-        primary: '#121212',
-        secondary: '#1E1E1E',
-        tertiary: '#2C2C2C',
-        elevated: '#2C2C2C',
-        overlay: 'rgba(0, 0, 0, 0.7)',
-      },
-      text: {
-        primary: '#F5F5F5',
-        secondary: '#BDBDBD',
-        tertiary: '#9E9E9E',
-        disabled: '#616161',
-        inverse: '#212121',
-      },
-      border: {
-        subtle: '#2C2C2C',
-        default: '#363636',
-        medium: '#424242',
-        strong: '#525252',
-      },
-      interactive: {
-        default: '#94A3B8',
-        hover: '#CBD5E1',
-        active: '#E2E8F0',
-        disabled: '#424242',
-        focus: '#94A3B8',
-      },
-    },
+    // Primary Colors
+    primary: '#94A3B8',           // Lighter slate for dark mode
+    primaryHover: '#CBD5E1',      // Lighter on hover
+    primaryActive: '#E2E8F0',     // Lightest on active
+    onPrimary: '#0F172A',         // Dark text on primary
+
+    // Secondary Colors
+    secondary: '#A8A29E',         // Lighter warm gray
+    secondaryHover: '#D6D3D1',    // Lighter on hover
+    secondaryActive: '#E7E5E4',   // Lightest on active
+    onSecondary: '#1C1917',       // Dark text on secondary
+
+    // Tertiary Colors
+    tertiary: '#64748B',          // Medium slate
+    tertiaryHover: '#94A3B8',     // Lighter on hover
+    tertiaryActive: '#CBD5E1',    // Lightest on active
+    onTertiary: '#0F172A',        // Dark text on tertiary
+
+    // Surface Colors
+    surface: '#1E293B',           // Main surface (cards, sheets)
+    surfaceVariant: '#0F172A',    // Variant surface (darker)
+    surfaceContainer: '#334155',  // Container backgrounds
+    surfaceContainerHigh: '#475569', // Higher elevation containers
+    onSurface: '#E2E8F0',         // Text on surface
+    onSurfaceVariant: '#94A3B8',  // Secondary text on surface
+
+    // Background Colors
+    background: '#0F172A',        // Main screen background
+    backgroundVariant: '#1E293B', // Variant background
+    onBackground: '#E2E8F0',      // Text on background
+
+    // State Colors
+    success: '#9CA3AF',           // Lighter cool gray
+    onSuccess: '#111827',         // Dark text
+    successContainer: '#374151',  // Success background
+    onSuccessContainer: '#D1D5DB', // Light text on container
+
+    warning: '#D6D3D1',           // Light warm gray
+    onWarning: '#1C1917',         // Dark text
+    warningContainer: '#57534E',  // Warning background
+    onWarningContainer: '#F5F5F4', // Light text on container
+
+    error: '#BDBDBD',             // Light gray
+    onError: '#212121',           // Dark text
+    errorContainer: '#616161',    // Error background
+    onErrorContainer: '#F5F5F5',  // Light text on container
+
+    info: '#CBD5E1',              // Light slate
+    onInfo: '#0F172A',            // Dark text
+    infoContainer: '#475569',     // Info background
+    onInfoContainer: '#E2E8F0',   // Light text on container
+
+    // Outline & Border Colors
+    outline: '#334155',           // Default borders
+    outlineVariant: '#475569',    // Variant borders
+    outlineStrong: '#64748B',     // Strong borders
+
+    // Scrim & Overlay
+    scrim: 'rgba(0, 0, 0, 0.7)',  // Darker overlay for dark mode
+    shadow: '#000000',            // Shadow color
+
+    // Disabled States
+    disabled: '#334155',          // Disabled background
+    onDisabled: '#64748B',        // Text on disabled
+
+    // Interactive Elements
+    hover: '#1E293B',             // Hover background overlay
+    pressed: '#334155',           // Pressed background overlay
+    focus: '#94A3B8',             // Focus ring color
+    ripple: 'rgba(148, 163, 184, 0.12)', // Ripple effect
+
+    // Dividers
+    divider: '#334155',           // Divider lines
+    dividerSubtle: '#1E293B',     // Subtle dividers
+    dividerStrong: '#475569',     // Strong dividers
   },
 };
 
@@ -162,17 +178,17 @@ export const Typography = {
     mono: 'Menlo',           // Code, monospace
   },
 
-  // Font Sizes (Mobile-first, rem-based)
+  // Font Sizes (Mobile-first)
   fontSize: {
-    xs: 12,    // 0.75rem - Captions, labels
-    sm: 14,    // 0.875rem - Small text
-    base: 16,  // 1rem - Body text
-    lg: 18,    // 1.125rem - Large body
-    xl: 20,    // 1.25rem - Subheadings
-    '2xl': 24, // 1.5rem - Headings
-    '3xl': 30, // 1.875rem - Large headings
-    '4xl': 36, // 2.25rem - Display
-    '5xl': 48, // 3rem - Hero
+    xs: 12,    // Captions, labels
+    sm: 14,    // Small text
+    base: 16,  // Body text
+    lg: 18,    // Large body
+    xl: 20,    // Subheadings
+    '2xl': 24, // Headings
+    '3xl': 30, // Large headings
+    '4xl': 36, // Display
+    '5xl': 48, // Hero
   },
 
   // Font Weights
@@ -203,40 +219,70 @@ export const Typography = {
     widest: 0.1,
   },
 
-  // Text Styles
+  // Text Styles (Pre-configured)
   styles: {
-    h1: {
+    displayLarge: {
+      fontSize: 48,
+      fontWeight: '700',
+      lineHeight: 1.2,
+      letterSpacing: -0.025,
+    },
+    displayMedium: {
       fontSize: 36,
       fontWeight: '700',
       lineHeight: 1.2,
       letterSpacing: -0.025,
     },
-    h2: {
+    displaySmall: {
       fontSize: 30,
       fontWeight: '700',
       lineHeight: 1.2,
       letterSpacing: -0.025,
     },
-    h3: {
+    headlineLarge: {
       fontSize: 24,
       fontWeight: '600',
       lineHeight: 1.375,
       letterSpacing: -0.025,
     },
-    h4: {
+    headlineMedium: {
       fontSize: 20,
       fontWeight: '600',
       lineHeight: 1.375,
       letterSpacing: 0,
     },
-    body: {
+    headlineSmall: {
+      fontSize: 18,
+      fontWeight: '600',
+      lineHeight: 1.375,
+      letterSpacing: 0,
+    },
+    titleLarge: {
+      fontSize: 20,
+      fontWeight: '500',
+      lineHeight: 1.5,
+      letterSpacing: 0,
+    },
+    titleMedium: {
       fontSize: 16,
+      fontWeight: '500',
+      lineHeight: 1.5,
+      letterSpacing: 0.015,
+    },
+    titleSmall: {
+      fontSize: 14,
+      fontWeight: '500',
+      lineHeight: 1.5,
+      letterSpacing: 0.015,
+    },
+    bodyLarge: {
+      fontSize: 18,
       fontWeight: '400',
       lineHeight: 1.5,
       letterSpacing: 0,
     },
-    bodyLarge: {
-      fontSize: 18,
+    bodyMedium: {
+      fontSize: 16,
       fontWeight: '400',
       lineHeight: 1.5,
       letterSpacing: 0,
@@ -247,17 +293,23 @@ export const Typography = {
       lineHeight: 1.5,
       letterSpacing: 0,
     },
-    caption: {
-      fontSize: 12,
-      fontWeight: '400',
-      lineHeight: 1.375,
-      letterSpacing: 0.025,
-    },
-    button: {
+    labelLarge: {
       fontSize: 16,
       fontWeight: '600',
       lineHeight: 1.5,
       letterSpacing: 0.025,
+    },
+    labelMedium: {
+      fontSize: 14,
+      fontWeight: '600',
+      lineHeight: 1.5,
+      letterSpacing: 0.025,
+    },
+    labelSmall: {
+      fontSize: 12,
+      fontWeight: '600',
+      lineHeight: 1.375,
+      letterSpacing: 0.05,
     },
   },
 };
@@ -268,61 +320,47 @@ export const Typography = {
 
 export const Spacing = {
   // Base spacing scale (4px base unit)
-  0: 0,
-  1: 4,     // 0.25rem
-  2: 8,     // 0.5rem
-  3: 12,    // 0.75rem
-  4: 16,    // 1rem
-  5: 20,    // 1.25rem
-  6: 24,    // 1.5rem
-  8: 32,    // 2rem
-  10: 40,   // 2.5rem
-  12: 48,   // 3rem
-  16: 64,   // 4rem
-  20: 80,   // 5rem
-  24: 96,   // 6rem
+  none: 0,
+  xs: 4,     // Extra small
+  sm: 8,     // Small
+  md: 12,    // Medium
+  lg: 16,    // Large
+  xl: 20,    // Extra large
+  '2xl': 24, // 2x Extra large
+  '3xl': 32, // 3x Extra large
+  '4xl': 40, // 4x Extra large
+  '5xl': 48, // 5x Extra large
+  '6xl': 64, // 6x Extra large
+  '7xl': 80, // 7x Extra large
+  '8xl': 96, // 8x Extra large
 
-  // Semantic spacing
-  semantic: {
-    xs: 4,
-    sm: 8,
-    md: 16,
-    lg: 24,
-    xl: 32,
-    '2xl': 48,
-    '3xl': 64,
-  },
-
-  // Component spacing
+  // Component-specific spacing
   component: {
-    padding: {
-      xs: 8,
-      sm: 12,
-      md: 16,
-      lg: 24,
-      xl: 32,
-    },
-    margin: {
-      xs: 8,
-      sm: 12,
-      md: 16,
-      lg: 24,
-      xl: 32,
-    },
-    gap: {
-      xs: 4,
-      sm: 8,
-      md: 12,
-      lg: 16,
-      xl: 24,
-    },
+    paddingXS: 8,
+    paddingSM: 12,
+    paddingMD: 16,
+    paddingLG: 24,
+    paddingXL: 32,
+
+    marginXS: 8,
+    marginSM: 12,
+    marginMD: 16,
+    marginLG: 24,
+    marginXL: 32,
+
+    gapXS: 4,
+    gapSM: 8,
+    gapMD: 12,
+    gapLG: 16,
+    gapXL: 24,
   },
 
   // Layout spacing
   layout: {
-    containerPadding: 16,
-    sectionGap: 32,
-    gridGap: 16,
+    screenPadding: 16,    // Standard screen padding
+    sectionGap: 32,       // Gap between sections
+    containerPadding: 16, // Container padding
+    gridGap: 16,          // Grid item gap
   },
 };
 
@@ -339,22 +377,17 @@ export const Border = {
     thick: 4,
   },
 
-  // Border radius
+  // Border radius (Semantic naming)
   radius: {
     none: 0,
-    sm: 4,
-    md: 8,
-    lg: 12,
-    xl: 16,
+    xs: 4,
+    sm: 8,
+    md: 12,
+    lg: 16,
+    xl: 20,
     '2xl': 24,
-    full: 9999,
-  },
-
-  // Border styles
-  style: {
-    solid: 'solid',
-    dashed: 'dashed',
-    dotted: 'dotted',
+    '3xl': 28,
+    full: 9999, // Circular
   },
 };
 
@@ -363,7 +396,15 @@ export const Border = {
 // ============================================================================
 
 export const Shadow = {
-  // Shadow presets (light mode)
+  // Elevation levels
+  none: {
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
+  },
+
   sm: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -371,6 +412,7 @@ export const Shadow = {
     shadowRadius: 2,
     elevation: 1,
   },
+
   md: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -378,6 +420,7 @@ export const Shadow = {
     shadowRadius: 4,
     elevation: 2,
   },
+
   lg: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -385,6 +428,7 @@ export const Shadow = {
     shadowRadius: 8,
     elevation: 4,
   },
+
   xl: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
@@ -392,35 +436,13 @@ export const Shadow = {
     shadowRadius: 16,
     elevation: 8,
   },
+
   '2xl': {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.2,
     shadowRadius: 24,
     elevation: 12,
-  },
-
-  // Semantic shadows
-  card: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  button: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  modal: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    elevation: 16,
   },
 };
 
@@ -437,13 +459,7 @@ export const Layout = {
     xl: 1280,
   },
 
-  // Grid columns
-  grid: {
-    columns: 12,
-    gap: 16,
-  },
-
-  // Breakpoints (for responsive design)
+  // Breakpoints
   breakpoints: {
     xs: 0,
     sm: 375,
@@ -458,14 +474,14 @@ export const Layout = {
 // ============================================================================
 
 export const Animation = {
-  // Duration
+  // Duration (in milliseconds)
   duration: {
     fast: 150,
     normal: 300,
     slow: 500,
   },
 
-  // Easing
+  // Easing functions
   easing: {
     linear: 'linear',
     easeIn: 'ease-in',
@@ -479,17 +495,16 @@ export const Animation = {
 // ============================================================================
 
 export const Opacity = {
-  0: 0,
-  10: 0.1,
-  20: 0.2,
-  30: 0.3,
-  40: 0.4,
-  50: 0.5,
-  60: 0.6,
-  70: 0.7,
-  80: 0.8,
-  90: 0.9,
-  100: 1,
+  invisible: 0,
+  disabled: 0.38,
+  hover: 0.08,
+  focus: 0.12,
+  selected: 0.12,
+  activated: 0.12,
+  pressed: 0.16,
+  dragged: 0.16,
+  semiTransparent: 0.5,
+  visible: 1,
 };
 
 // ============================================================================
@@ -498,17 +513,19 @@ export const Opacity = {
 
 export const ZIndex = {
   base: 0,
+  raised: 1,
   dropdown: 1000,
   sticky: 1020,
   fixed: 1030,
-  modalBackdrop: 1040,
+  backdrop: 1040,
   modal: 1050,
   popover: 1060,
   tooltip: 1070,
+  notification: 1080,
 };
 
 // ============================================================================
-// DESIGN TOKENS - Combined for easy access
+// DESIGN SYSTEM - Complete Export
 // ============================================================================
 
 export const DesignSystem = {

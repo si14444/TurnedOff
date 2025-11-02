@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "TurnedOff",
-    "slug": "TurnedOff",
+    "name": "아맞다",
+    "slug": "아맞다",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "turnedoff",
+    "scheme": "아맞다",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -30,7 +30,13 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "아맞다 앱이 체크리스트 항목을 사진으로 인증하기 위해 카메라 접근 권한이 필요합니다."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
