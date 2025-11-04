@@ -40,4 +40,6 @@ yarn-error.*
 /ios
 /android
 
-/doc
+/docs
+GEMINI.md
+CLAUDE.md

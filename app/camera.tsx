@@ -36,7 +36,7 @@ export default function CameraScreen() {
     return (
       <View style={styles(theme).permissionContainer}>
         <View style={styles(theme).permissionIconContainer}>
-          <Ionicons name="camera-outline" size={64} color="#64748B" />
+          <Ionicons name="camera-outline" size={64} color={theme.primary} />
         </View>
 
         <Text style={styles(theme).permissionTitle}>카메라 권한 필요</Text>
@@ -177,7 +177,7 @@ export default function CameraScreen() {
               pressed && { opacity: 0.8 },
             ]}
             onPress={retakePicture}>
-            <Ionicons name="refresh" size={22} color="#0F172A" />
+            <Ionicons name="refresh" size={22} color={theme.onSurface} />
             <Text style={styles(theme).retakeButtonText}>다시 찍기</Text>
           </Pressable>
 
@@ -258,26 +258,28 @@ const styles = (theme: typeof Colors.light) =>
     previewControls: {
       flexDirection: 'row',
       padding: Spacing.lg,
-      backgroundColor: '#FFFFFF',
-      gap: Spacing.sm,
+      paddingBottom: Spacing.xl,
+      backgroundColor: theme.surface,
+      gap: Spacing.md,
       borderTopWidth: 1,
-      borderTopColor: '#E2E8F0',
+      borderTopColor: theme.outline,
+      ...Shadow.lg,
     },
     retakeButton: {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingVertical: Spacing.md + 2,
-      borderRadius: Border.radius.md,
-      gap: Spacing.xs,
-      backgroundColor: '#FFFFFF',
-      borderWidth: 1.5,
-      borderColor: '#CBD5E1',
+      paddingVertical: Spacing.lg,
+      borderRadius: Border.radius.lg,
+      gap: Spacing.sm,
+      backgroundColor: theme.surface,
+      borderWidth: 2,
+      borderColor: theme.outlineVariant,
     },
     retakeButtonText: {
       ...Typography.styles.labelLarge,
-      color: '#0F172A',
+      color: theme.onSurface,
       fontWeight: Typography.fontWeight.semibold,
     },
     confirmButton: {
@@ -285,14 +287,15 @@ const styles = (theme: typeof Colors.light) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingVertical: Spacing.md + 2,
-      borderRadius: Border.radius.md,
-      gap: Spacing.xs,
-      backgroundColor: '#64748B',
+      paddingVertical: Spacing.lg,
+      borderRadius: Border.radius.lg,
+      gap: Spacing.sm,
+      backgroundColor: theme.primary,
+      ...Shadow.md,
     },
     confirmButtonText: {
       ...Typography.styles.labelLarge,
-      color: '#FFFFFF',
+      color: theme.onPrimary,
       fontWeight: Typography.fontWeight.semibold,
     },
     permissionContainer: {
@@ -300,40 +303,41 @@ const styles = (theme: typeof Colors.light) =>
       alignItems: 'center',
       justifyContent: 'center',
       padding: Spacing['4xl'],
-      backgroundColor: '#F8FAFC',
+      backgroundColor: theme.background,
     },
     permissionIconContainer: {
       width: 120,
       height: 120,
       borderRadius: Border.radius.full,
-      backgroundColor: '#E2E8F0',
+      backgroundColor: theme.surfaceContainer,
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: Spacing['2xl'],
     },
     permissionTitle: {
       ...Typography.styles.headlineMedium,
-      color: '#0F172A',
+      color: theme.onSurface,
       fontWeight: Typography.fontWeight.bold,
       marginBottom: Spacing.md,
       textAlign: 'center',
     },
     permissionText: {
       ...Typography.styles.bodyMedium,
-      color: '#64748B',
+      color: theme.onSurfaceVariant,
       textAlign: 'center',
       lineHeight: 24,
       marginBottom: Spacing['2xl'],
     },
     permissionButton: {
-      backgroundColor: '#64748B',
-      paddingVertical: Spacing.md + 2,
+      backgroundColor: theme.primary,
+      paddingVertical: Spacing.lg,
       paddingHorizontal: Spacing['2xl'],
-      borderRadius: Border.radius.md,
+      borderRadius: Border.radius.lg,
+      ...Shadow.md,
     },
     permissionButtonText: {
       ...Typography.styles.labelLarge,
-      color: '#FFFFFF',
+      color: theme.onPrimary,
       fontWeight: Typography.fontWeight.semibold,
     },
   });

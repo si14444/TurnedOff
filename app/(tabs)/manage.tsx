@@ -183,7 +183,7 @@ export default function ManageScreen() {
             value={newItemName}
             onChangeText={setNewItemName}
             placeholder="새 항목 추가 (예: 고데기, 가스밸브, 전등)"
-            placeholderTextColor="#94A3B8"
+            placeholderTextColor={theme.onSurfaceVariant}
             returnKeyType="done"
             onSubmitEditing={handleAddItem}
             editable={!isAdding}
@@ -229,12 +229,12 @@ const styles = (theme: typeof Colors.light) =>
     },
     headerTitle: {
       ...Typography.styles.headlineLarge,
-      color: '#0F172A',
+      color: theme.onSurface,
       fontWeight: Typography.fontWeight.bold,
     },
     headerSubtitle: {
       ...Typography.styles.bodyLarge,
-      color: '#64748B',
+      color: theme.onSurfaceVariant,
     },
     itemWrapper: {
       marginBottom: Spacing.md,
@@ -242,11 +242,12 @@ const styles = (theme: typeof Colors.light) =>
     itemContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FFFFFF',
+      backgroundColor: theme.surface,
       padding: Spacing.lg,
-      borderRadius: Border.radius.md,
+      borderRadius: Border.radius.lg,
       borderWidth: 1,
-      borderColor: '#E2E8F0',
+      borderColor: theme.outline,
+      ...Shadow.sm,
     },
     dragHandle: {
       marginRight: Spacing.md,
@@ -258,21 +259,22 @@ const styles = (theme: typeof Colors.light) =>
     },
     itemName: {
       ...Typography.styles.bodyLarge,
-      color: '#1E293B',
+      color: theme.onSurface,
       fontWeight: Typography.fontWeight.medium,
     },
     itemMeta: {
       ...Typography.styles.bodySmall,
-      color: '#94A3B8',
+      color: theme.onSurfaceVariant,
     },
     deleteButton: {
       padding: Spacing.md,
-      borderRadius: Border.radius.md,
-      backgroundColor: '#FEE2E2',
+      borderRadius: Border.radius.lg,
+      backgroundColor: theme.errorContainer,
       marginLeft: Spacing.sm,
     },
     deleteButtonPressed: {
-      backgroundColor: '#FCA5A5',
+      backgroundColor: theme.error,
+      transform: [{ scale: 0.95 }],
     },
     emptyContainer: {
       flex: 1,
@@ -292,21 +294,23 @@ const styles = (theme: typeof Colors.light) =>
     },
     emptyTitle: {
       ...Typography.styles.headlineMedium,
-      color: '#1E293B',
+      color: theme.onSurface,
       marginBottom: Spacing.sm,
       textAlign: 'center',
     },
     emptySubtext: {
       ...Typography.styles.bodyMedium,
-      color: '#64748B',
+      color: theme.onSurfaceVariant,
       textAlign: 'center',
       lineHeight: 24,
     },
     addSection: {
       padding: Spacing.lg,
-      backgroundColor: '#FFFFFF',
+      paddingBottom: Spacing.xl,
+      backgroundColor: theme.surface,
       borderTopWidth: 1,
-      borderTopColor: '#E2E8F0',
+      borderTopColor: theme.outline,
+      ...Shadow.lg,
     },
     addInputContainer: {
       flexDirection: 'row',
@@ -316,24 +320,26 @@ const styles = (theme: typeof Colors.light) =>
     input: {
       ...Typography.styles.bodyMedium,
       flex: 1,
-      backgroundColor: '#FFFFFF',
-      borderWidth: 1.5,
-      borderColor: '#CBD5E1',
-      borderRadius: Border.radius.md,
-      paddingVertical: Spacing.md + 2,
+      backgroundColor: theme.surface,
+      borderWidth: 2,
+      borderColor: theme.outlineVariant,
+      borderRadius: Border.radius.lg,
+      paddingVertical: Spacing.lg,
       paddingHorizontal: Spacing.lg,
-      color: '#0F172A',
+      color: theme.onSurface,
       fontSize: 16,
     },
     addButton: {
-      width: 52,
-      height: 52,
-      backgroundColor: '#64748B',
-      borderRadius: Border.radius.md,
+      width: 56,
+      height: 56,
+      backgroundColor: theme.primary,
+      borderRadius: Border.radius.lg,
       alignItems: 'center',
       justifyContent: 'center',
+      ...Shadow.md,
     },
     addButtonDisabled: {
-      backgroundColor: '#E2E8F0',
+      backgroundColor: theme.surfaceContainer,
+      ...Shadow.none,
     },
   });

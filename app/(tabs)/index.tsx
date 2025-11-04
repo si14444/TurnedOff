@@ -17,7 +17,7 @@ import {
 } from "react-native";
 
 import { useColorScheme } from "@/components/useColorScheme";
-import { Border, Colors, Spacing, Typography } from "@/constants/DesignSystem";
+import { Border, Colors, Shadow, Spacing, Typography } from "@/constants/DesignSystem";
 import { checkAndResetIfNeeded, getChecklistItems } from "@/services/storage";
 import { ChecklistItem } from "@/types";
 
@@ -28,6 +28,7 @@ export default function HomeScreen() {
   const [items, setItems] = useState<ChecklistItem[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
+  const [greeting, setGreeting] = useState("");
 
   const loadItems = async () => {
     try {
@@ -43,6 +44,16 @@ export default function HomeScreen() {
         weekday: "long",
       });
       setCurrentDate(dateStr);
+
+      // Set greeting based on time
+      const hour = today.getHours();
+      if (hour < 12) {
+        setGreeting("좋은 아침이에요");
+      } else if (hour < 18) {
+        setGreeting("좋은 오후에요");
+      } else {
+        setGreeting("좋은 저녁이에요");
+      }
     } catch (error) {
       console.error("Error loading items:", error);
       Alert.alert("오류", "체크리스트를 불러오는 중 문제가 발생했습니다.");
@@ -204,48 +215,135 @@ export default function HomeScreen() {
   const progressPercentage =
     totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
 
-  return (
-    <View style={styles(theme).container}>
-      {/* Header */}
-      <View style={styles(theme).header}>
-        {/* Date */}
+  const renderHeader = () => (
+    <>
+      {/* Welcome Section */}
+      <View style={styles(theme).welcomeSection}>
+        <View style={styles(theme).greetingContainer}>
+          <Text style={styles(theme).greetingText}>{greeting}</Text>
+          <Ionicons name="sunny" size={24} color={theme.primary} />
+        </View>
         <Text style={styles(theme).dateText}>{currentDate}</Text>
-
-        {/* Progress */}
-        {totalCount > 0 && (
-          <View style={styles(theme).progressContainer}>
-            <View style={styles(theme).progressHeader}>
-              <Text style={styles(theme).progressLabel}>오늘의 진행률</Text>
-              <Text style={styles(theme).progressCount}>
-                {completedCount}/{totalCount}
-              </Text>
-            </View>
-
-            {/* Progress Bar */}
-            <View style={styles(theme).progressBar}>
-              <View
-                style={[
-                  styles(theme).progressFill,
-                  { width: `${progressPercentage}%` },
-                ]}
-              />
-            </View>
-
-            {/* Completion Message */}
-            {completedCount === totalCount && (
-              <Text style={styles(theme).completionText}>
-                ✓ 모든 항목 확인 완료!
-              </Text>
-            )}
-          </View>
-        )}
       </View>
 
-      {/* List */}
+      {/* Stats Cards */}
+      {totalCount > 0 && (
+        <View style={styles(theme).statsSection}>
+          {/* Today's Progress Card */}
+          <View style={styles(theme).statCard}>
+            <View style={styles(theme).statCardHeader}>
+              <Ionicons name="checkmark-done" size={20} color={theme.primary} />
+              <Text style={styles(theme).statCardTitle}>오늘의 완료율</Text>
+            </View>
+            <View style={styles(theme).statCardBody}>
+              <Text style={styles(theme).statCardValue}>
+                {Math.round(progressPercentage)}%
+              </Text>
+              <View style={styles(theme).miniProgressBar}>
+                <View
+                  style={[
+                    styles(theme).miniProgressFill,
+                    { width: `${progressPercentage}%` },
+                  ]}
+                />
+              </View>
+              <Text style={styles(theme).statCardSubtext}>
+                {completedCount}/{totalCount} 완료
+              </Text>
+            </View>
+          </View>
+
+          {/* Quick Stats */}
+          <View style={styles(theme).quickStats}>
+            <View style={styles(theme).quickStatItem}>
+              <Ionicons name="list" size={18} color={theme.onSurfaceVariant} />
+              <Text style={styles(theme).quickStatValue}>{totalCount}</Text>
+              <Text style={styles(theme).quickStatLabel}>전체 항목</Text>
+            </View>
+            <View style={styles(theme).quickStatDivider} />
+            <View style={styles(theme).quickStatItem}>
+              <Ionicons name="flame" size={18} color={theme.primary} />
+              <Text style={styles(theme).quickStatValue}>{completedCount}</Text>
+              <Text style={styles(theme).quickStatLabel}>완료</Text>
+            </View>
+          </View>
+        </View>
+      )}
+
+      {/* Native Ad Placeholder */}
+      <View style={styles(theme).nativeAdContainer}>
+        <View style={styles(theme).adBadge}>
+          <Text style={styles(theme).adBadgeText}>AD</Text>
+        </View>
+        <View style={styles(theme).adContent}>
+          <View style={styles(theme).adIconPlaceholder}>
+            <Ionicons name="cube-outline" size={32} color={theme.onSurfaceVariant} />
+          </View>
+          <View style={styles(theme).adTextContainer}>
+            <Text style={styles(theme).adTitle}>광고 영역</Text>
+            <Text style={styles(theme).adDescription}>
+              네이티브 광고가 표시됩니다
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Quick Actions */}
+      {totalCount > 0 && (
+        <View style={styles(theme).quickActionsSection}>
+          <Text style={styles(theme).sectionTitle}>빠른 실행</Text>
+          <View style={styles(theme).quickActionsGrid}>
+            <Pressable
+              style={({ pressed }) => [
+                styles(theme).quickActionButton,
+                pressed && { opacity: 0.7 },
+              ]}
+              onPress={() => router.push("/(tabs)/manage")}
+            >
+              <View style={[styles(theme).quickActionIcon, { backgroundColor: theme.primaryContainer }]}>
+                <Ionicons name="add" size={20} color={theme.primary} />
+              </View>
+              <Text style={styles(theme).quickActionText}>항목 추가</Text>
+            </Pressable>
+
+            <Pressable
+              style={({ pressed }) => [
+                styles(theme).quickActionButton,
+                pressed && { opacity: 0.7 },
+              ]}
+              onPress={onRefresh}
+            >
+              <View style={[styles(theme).quickActionIcon, { backgroundColor: theme.secondaryContainer }]}>
+                <Ionicons name="refresh" size={20} color={theme.secondary} />
+              </View>
+              <Text style={styles(theme).quickActionText}>새로고침</Text>
+            </Pressable>
+          </View>
+        </View>
+      )}
+
+      {/* Checklist Title */}
+      {totalCount > 0 && (
+        <View style={styles(theme).checklistHeader}>
+          <Text style={styles(theme).checklistTitle}>오늘의 체크리스트</Text>
+          {completedCount === totalCount && (
+            <View style={styles(theme).completionBadge}>
+              <Ionicons name="checkmark-circle" size={16} color={theme.success} />
+              <Text style={styles(theme).completionBadgeText}>완료</Text>
+            </View>
+          )}
+        </View>
+      )}
+    </>
+  );
+
+  return (
+    <View style={styles(theme).container}>
       <FlatList
         data={items}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        ListHeaderComponent={renderHeader}
         contentContainerStyle={
           items.length === 0
             ? styles(theme).listEmpty
@@ -271,72 +369,250 @@ const styles = (theme: typeof Colors.light) =>
       flex: 1,
       backgroundColor: theme.background,
     },
-    header: {
+    listContent: {
+      paddingHorizontal: Spacing.lg,
+      paddingBottom: Spacing.xl,
+      backgroundColor: theme.background,
+    },
+    // Welcome Section
+    welcomeSection: {
       padding: Spacing.xl,
-      paddingBottom: Spacing.lg,
-      backgroundColor: "#FFFFFF",
-      borderBottomWidth: 1,
-      borderBottomColor: "#F1F5F9",
+      paddingTop: Spacing["2xl"],
+      backgroundColor: theme.surface,
+      borderBottomLeftRadius: Border.radius["2xl"],
+      borderBottomRightRadius: Border.radius["2xl"],
+      ...Shadow.sm,
+    },
+    greetingContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: Spacing.sm,
+      marginBottom: Spacing.xs,
+    },
+    greetingText: {
+      ...Typography.styles.headlineLarge,
+      color: theme.onSurface,
+      fontWeight: Typography.fontWeight.bold,
     },
     dateText: {
-      ...Typography.styles.headlineMedium,
-      color: "#0F172A",
-      fontWeight: Typography.fontWeight.bold,
-      marginBottom: Spacing.lg,
+      ...Typography.styles.bodyLarge,
+      color: theme.onSurfaceVariant,
     },
-    progressContainer: {
+    // Stats Section
+    statsSection: {
+      paddingHorizontal: Spacing.lg,
+      paddingTop: Spacing.lg,
+      gap: Spacing.md,
+    },
+    statCard: {
+      backgroundColor: theme.surface,
+      padding: Spacing.lg,
+      borderRadius: Border.radius.xl,
+      borderWidth: 1,
+      borderColor: theme.outline,
+      ...Shadow.md,
+    },
+    statCardHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: Spacing.sm,
+      marginBottom: Spacing.md,
+    },
+    statCardTitle: {
+      ...Typography.styles.titleSmall,
+      color: theme.onSurfaceVariant,
+      fontWeight: Typography.fontWeight.medium,
+    },
+    statCardBody: {
       gap: Spacing.sm,
     },
-    progressHeader: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-    },
-    progressLabel: {
-      ...Typography.styles.bodyMedium,
-      color: "#64748B",
-    },
-    progressCount: {
-      ...Typography.styles.titleMedium,
-      color: "#64748B",
+    statCardValue: {
+      ...Typography.styles.displaySmall,
+      color: theme.onSurface,
       fontWeight: Typography.fontWeight.bold,
     },
-    progressBar: {
+    miniProgressBar: {
       height: 6,
-      backgroundColor: "#E2E8F0",
+      backgroundColor: theme.surfaceContainer,
       borderRadius: Border.radius.full,
       overflow: "hidden",
     },
-    progressFill: {
+    miniProgressFill: {
       height: "100%",
-      backgroundColor: "#64748B",
+      backgroundColor: theme.primary,
       borderRadius: Border.radius.full,
     },
-    completionText: {
+    statCardSubtext: {
       ...Typography.styles.bodyMedium,
-      color: "#10B981",
-      fontWeight: Typography.fontWeight.semibold,
-      marginTop: Spacing.xs,
+      color: theme.onSurfaceVariant,
     },
-    listContent: {
+    quickStats: {
+      flexDirection: "row",
+      backgroundColor: theme.surface,
+      borderRadius: Border.radius.xl,
+      borderWidth: 1,
+      borderColor: theme.outline,
+      overflow: "hidden",
+      ...Shadow.sm,
+    },
+    quickStatItem: {
+      flex: 1,
       padding: Spacing.lg,
+      alignItems: "center",
+      gap: Spacing.xs,
+    },
+    quickStatDivider: {
+      width: 1,
+      backgroundColor: theme.outline,
+    },
+    quickStatValue: {
+      ...Typography.styles.titleLarge,
+      color: theme.onSurface,
+      fontWeight: Typography.fontWeight.bold,
+    },
+    quickStatLabel: {
+      ...Typography.styles.bodySmall,
+      color: theme.onSurfaceVariant,
+    },
+    // Native Ad
+    nativeAdContainer: {
+      marginHorizontal: Spacing.lg,
+      marginTop: Spacing.lg,
+      backgroundColor: theme.surfaceVariant,
+      borderRadius: Border.radius.xl,
+      borderWidth: 1,
+      borderColor: theme.outlineVariant,
+      overflow: "hidden",
+      position: "relative",
+    },
+    adBadge: {
+      position: "absolute",
+      top: Spacing.sm,
+      right: Spacing.sm,
+      backgroundColor: theme.onSurfaceVariant,
+      paddingHorizontal: Spacing.sm,
+      paddingVertical: 2,
+      borderRadius: Border.radius.sm,
+      zIndex: 1,
+    },
+    adBadgeText: {
+      ...Typography.styles.labelSmall,
+      color: theme.surface,
+      fontWeight: Typography.fontWeight.bold,
+      fontSize: 10,
+    },
+    adContent: {
+      flexDirection: "row",
+      padding: Spacing.lg,
+      alignItems: "center",
       gap: Spacing.md,
+    },
+    adIconPlaceholder: {
+      width: 60,
+      height: 60,
+      borderRadius: Border.radius.lg,
+      backgroundColor: theme.surfaceContainer,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    adTextContainer: {
+      flex: 1,
+      gap: Spacing.xs,
+    },
+    adTitle: {
+      ...Typography.styles.titleMedium,
+      color: theme.onSurfaceVariant,
+      fontWeight: Typography.fontWeight.medium,
+    },
+    adDescription: {
+      ...Typography.styles.bodySmall,
+      color: theme.onSurfaceVariant,
+      opacity: 0.7,
+    },
+    // Quick Actions
+    quickActionsSection: {
+      paddingHorizontal: Spacing.lg,
+      paddingTop: Spacing.lg,
+      gap: Spacing.md,
+    },
+    sectionTitle: {
+      ...Typography.styles.titleMedium,
+      color: theme.onSurface,
+      fontWeight: Typography.fontWeight.semibold,
+    },
+    quickActionsGrid: {
+      flexDirection: "row",
+      gap: Spacing.md,
+    },
+    quickActionButton: {
+      flex: 1,
+      backgroundColor: theme.surface,
+      padding: Spacing.lg,
+      borderRadius: Border.radius.xl,
+      borderWidth: 1,
+      borderColor: theme.outline,
+      alignItems: "center",
+      gap: Spacing.sm,
+      ...Shadow.sm,
+    },
+    quickActionIcon: {
+      width: 48,
+      height: 48,
+      borderRadius: Border.radius.lg,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    quickActionText: {
+      ...Typography.styles.labelMedium,
+      color: theme.onSurface,
+      fontWeight: Typography.fontWeight.medium,
+    },
+    // Checklist Header
+    checklistHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: Spacing.lg,
+      paddingTop: Spacing.xl,
+      paddingBottom: Spacing.md,
+    },
+    checklistTitle: {
+      ...Typography.styles.titleLarge,
+      color: theme.onSurface,
+      fontWeight: Typography.fontWeight.bold,
+    },
+    completionBadge: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: Spacing.xs,
+      backgroundColor: theme.successContainer,
+      paddingHorizontal: Spacing.md,
+      paddingVertical: Spacing.xs,
+      borderRadius: Border.radius.full,
+    },
+    completionBadgeText: {
+      ...Typography.styles.labelSmall,
+      color: theme.success,
+      fontWeight: Typography.fontWeight.semibold,
     },
     listEmpty: {
       flexGrow: 1,
+      backgroundColor: theme.background,
     },
     itemContainer: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      backgroundColor: "#FFFFFF",
+      backgroundColor: theme.surface,
       padding: Spacing.lg,
-      borderRadius: Border.radius.md,
+      borderRadius: Border.radius.lg,
       borderWidth: 1,
-      borderColor: "#E2E8F0",
+      borderColor: theme.outline,
+      ...Shadow.sm,
     },
     itemPressed: {
-      backgroundColor: "#F8FAFC",
+      backgroundColor: theme.surfaceContainerHigh,
+      transform: [{ scale: 0.98 }],
     },
     itemLeft: {
       flexDirection: "row",
@@ -364,11 +640,11 @@ const styles = (theme: typeof Colors.light) =>
     },
     itemName: {
       ...Typography.styles.bodyLarge,
-      color: "#1E293B",
+      color: theme.onSurface,
       fontWeight: Typography.fontWeight.medium,
     },
     itemNameChecked: {
-      color: "#94A3B8",
+      color: theme.onSurfaceVariant,
     },
     timeContainer: {
       flexDirection: "row",
@@ -377,24 +653,24 @@ const styles = (theme: typeof Colors.light) =>
     },
     checkedTime: {
       ...Typography.styles.bodySmall,
-      color: "#94A3B8",
+      color: theme.onSurfaceVariant,
     },
     itemRight: {
       marginLeft: Spacing.sm,
     },
     photoIndicator: {
-      width: 40,
-      height: 40,
-      borderRadius: Border.radius.md,
-      backgroundColor: "#DBEAFE",
+      width: 44,
+      height: 44,
+      borderRadius: Border.radius.lg,
+      backgroundColor: theme.primaryContainer,
       alignItems: "center",
       justifyContent: "center",
     },
     cameraHint: {
-      width: 40,
-      height: 40,
-      borderRadius: Border.radius.md,
-      backgroundColor: "#F1F5F9",
+      width: 44,
+      height: 44,
+      borderRadius: Border.radius.lg,
+      backgroundColor: theme.surfaceContainer,
       alignItems: "center",
       justifyContent: "center",
     },
@@ -415,13 +691,13 @@ const styles = (theme: typeof Colors.light) =>
     },
     emptyTitle: {
       ...Typography.styles.headlineMedium,
-      color: "#1E293B",
+      color: theme.onSurface,
       marginBottom: Spacing.sm,
       textAlign: "center",
     },
     emptySubtext: {
       ...Typography.styles.bodyMedium,
-      color: "#64748B",
+      color: theme.onSurfaceVariant,
       textAlign: "center",
       lineHeight: 24,
       marginBottom: Spacing["2xl"],
@@ -430,14 +706,15 @@ const styles = (theme: typeof Colors.light) =>
       flexDirection: "row",
       alignItems: "center",
       gap: Spacing.sm,
-      backgroundColor: "#64748B",
-      paddingVertical: Spacing.md + 2,
-      paddingHorizontal: Spacing.xl,
-      borderRadius: Border.radius.md,
+      backgroundColor: theme.primary,
+      paddingVertical: Spacing.lg,
+      paddingHorizontal: Spacing.xl + Spacing.sm,
+      borderRadius: Border.radius.lg,
+      ...Shadow.md,
     },
     emptyButtonText: {
       ...Typography.styles.labelLarge,
-      color: "#FFFFFF",
+      color: theme.onPrimary,
       fontWeight: Typography.fontWeight.semibold,
     },
   });

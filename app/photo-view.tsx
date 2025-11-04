@@ -119,13 +119,13 @@ const styles = (theme: typeof Colors.light) =>
     },
     noPhotoTitle: {
       ...Typography.styles.headlineMedium,
-      color: '#0F172A',
+      color: theme.onSurface,
       marginBottom: Spacing.sm,
       textAlign: 'center',
     },
     noPhotoSubtext: {
       ...Typography.styles.bodyMedium,
-      color: '#64748B',
+      color: theme.onSurfaceVariant,
       textAlign: 'center',
       lineHeight: 24,
     },
