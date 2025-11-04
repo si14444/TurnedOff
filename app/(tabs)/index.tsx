@@ -17,13 +17,20 @@ import {
 } from "react-native";
 
 import { useColorScheme } from "@/components/useColorScheme";
-import { Border, Colors, Shadow, Spacing, Typography } from "@/constants/DesignSystem";
+import {
+  Border,
+  Colors,
+  Shadow,
+  Spacing,
+  Typography,
+} from "@/constants/DesignSystem";
 import { checkAndResetIfNeeded, getChecklistItems } from "@/services/storage";
 import { ChecklistItem } from "@/types";
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
-  const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
+  // Force light mode for debugging - text visibility issue
+  const theme = Colors.light;
 
   // Initialize greeting and date immediately
   const getGreeting = () => {
@@ -208,7 +215,7 @@ export default function HomeScreen() {
         onPress={() => router.push("/(tabs)/manage")}
       >
         <Ionicons name="add" size={20} color={theme.onPrimary} />
-        <Text style={styles(theme).emptyButtonText}>첫 항목 추가하기</Text>
+        <Text style={{ color: "black" }}>첫 항목 추가하기</Text>
       </Pressable>
     </View>
   );
@@ -280,7 +287,11 @@ export default function HomeScreen() {
         </View>
         <View style={styles(theme).adContent}>
           <View style={styles(theme).adIconPlaceholder}>
-            <Ionicons name="cube-outline" size={32} color={theme.onSurfaceVariant} />
+            <Ionicons
+              name="cube-outline"
+              size={32}
+              color={theme.onSurfaceVariant}
+            />
           </View>
           <View style={styles(theme).adTextContainer}>
             <Text style={styles(theme).adTitle}>광고 영역</Text>
@@ -303,7 +314,12 @@ export default function HomeScreen() {
               ]}
               onPress={() => router.push("/(tabs)/manage")}
             >
-              <View style={[styles(theme).quickActionIcon, { backgroundColor: theme.primaryContainer }]}>
+              <View
+                style={[
+                  styles(theme).quickActionIcon,
+                  { backgroundColor: theme.primaryContainer },
+                ]}
+              >
                 <Ionicons name="add" size={20} color={theme.primary} />
               </View>
               <Text style={styles(theme).quickActionText}>항목 추가</Text>
@@ -316,7 +332,12 @@ export default function HomeScreen() {
               ]}
               onPress={onRefresh}
             >
-              <View style={[styles(theme).quickActionIcon, { backgroundColor: theme.secondaryContainer }]}>
+              <View
+                style={[
+                  styles(theme).quickActionIcon,
+                  { backgroundColor: theme.secondaryContainer },
+                ]}
+              >
                 <Ionicons name="refresh" size={20} color={theme.secondary} />
               </View>
               <Text style={styles(theme).quickActionText}>새로고침</Text>
@@ -331,7 +352,11 @@ export default function HomeScreen() {
           <Text style={styles(theme).checklistTitle}>오늘의 체크리스트</Text>
           {completedCount === totalCount && (
             <View style={styles(theme).completionBadge}>
-              <Ionicons name="checkmark-circle" size={16} color={theme.success} />
+              <Ionicons
+                name="checkmark-circle"
+                size={16}
+                color={theme.success}
+              />
               <Text style={styles(theme).completionBadgeText}>완료</Text>
             </View>
           )}
@@ -381,7 +406,7 @@ const styles = (theme: typeof Colors.light) =>
     welcomeSection: {
       padding: Spacing.xl,
       paddingTop: Spacing["2xl"],
-      backgroundColor: theme.surface,
+      backgroundColor: "#FFFFFF",
       borderBottomLeftRadius: Border.radius["2xl"],
       borderBottomRightRadius: Border.radius["2xl"],
       ...Shadow.sm,
@@ -393,13 +418,13 @@ const styles = (theme: typeof Colors.light) =>
       marginBottom: Spacing.xs,
     },
     greetingText: {
-      ...Typography.styles.headlineLarge,
-      color: theme.onSurface,
-      fontWeight: Typography.fontWeight.bold,
+      fontSize: 28,
+      color: "#000000",
+      fontWeight: "700",
     },
     dateText: {
-      ...Typography.styles.bodyLarge,
-      color: theme.onSurfaceVariant,
+      fontSize: 16,
+      color: "#333333",
     },
     // Stats Section
     statsSection: {
@@ -422,17 +447,17 @@ const styles = (theme: typeof Colors.light) =>
       marginBottom: Spacing.md,
     },
     statCardTitle: {
-      ...Typography.styles.titleSmall,
-      color: theme.onSurfaceVariant,
-      fontWeight: Typography.fontWeight.medium,
+      fontSize: 14,
+      color: "#666666",
+      fontWeight: "500",
     },
     statCardBody: {
       gap: Spacing.sm,
     },
     statCardValue: {
-      ...Typography.styles.displaySmall,
-      color: theme.onSurface,
-      fontWeight: Typography.fontWeight.bold,
+      fontSize: 30,
+      color: "#000000",
+      fontWeight: "700",
     },
     miniProgressBar: {
       height: 6,
@@ -446,8 +471,8 @@ const styles = (theme: typeof Colors.light) =>
       borderRadius: Border.radius.full,
     },
     statCardSubtext: {
-      ...Typography.styles.bodyMedium,
-      color: theme.onSurfaceVariant,
+      fontSize: 16,
+      color: "#666666",
     },
     quickStats: {
       flexDirection: "row",
@@ -469,13 +494,13 @@ const styles = (theme: typeof Colors.light) =>
       backgroundColor: theme.outline,
     },
     quickStatValue: {
-      ...Typography.styles.titleLarge,
-      color: theme.onSurface,
-      fontWeight: Typography.fontWeight.bold,
+      fontSize: 20,
+      color: "#000000",
+      fontWeight: "700",
     },
     quickStatLabel: {
-      ...Typography.styles.bodySmall,
-      color: theme.onSurfaceVariant,
+      fontSize: 14,
+      color: "#666666",
     },
     // Native Ad
     nativeAdContainer: {
@@ -499,10 +524,9 @@ const styles = (theme: typeof Colors.light) =>
       zIndex: 1,
     },
     adBadgeText: {
-      ...Typography.styles.labelSmall,
-      color: theme.surface,
-      fontWeight: Typography.fontWeight.bold,
       fontSize: 10,
+      color: "#FFFFFF",
+      fontWeight: "700",
     },
     adContent: {
       flexDirection: "row",
@@ -523,14 +547,13 @@ const styles = (theme: typeof Colors.light) =>
       gap: Spacing.xs,
     },
     adTitle: {
-      ...Typography.styles.titleMedium,
-      color: theme.onSurfaceVariant,
-      fontWeight: Typography.fontWeight.medium,
+      fontSize: 16,
+      color: "#333333",
+      fontWeight: "500",
     },
     adDescription: {
-      ...Typography.styles.bodySmall,
-      color: theme.onSurfaceVariant,
-      opacity: 0.7,
+      fontSize: 14,
+      color: "#666666",
     },
     // Quick Actions
     quickActionsSection: {
@@ -539,9 +562,9 @@ const styles = (theme: typeof Colors.light) =>
       gap: Spacing.md,
     },
     sectionTitle: {
-      ...Typography.styles.titleMedium,
-      color: theme.onSurface,
-      fontWeight: Typography.fontWeight.semibold,
+      fontSize: 16,
+      color: "#000000",
+      fontWeight: "600",
     },
     quickActionsGrid: {
       flexDirection: "row",
@@ -566,9 +589,9 @@ const styles = (theme: typeof Colors.light) =>
       justifyContent: "center",
     },
     quickActionText: {
-      ...Typography.styles.labelMedium,
-      color: theme.onSurface,
-      fontWeight: Typography.fontWeight.medium,
+      fontSize: 14,
+      color: "#000000",
+      fontWeight: "500",
     },
     // Checklist Header
     checklistHeader: {
@@ -580,9 +603,9 @@ const styles = (theme: typeof Colors.light) =>
       paddingBottom: Spacing.md,
     },
     checklistTitle: {
-      ...Typography.styles.titleLarge,
-      color: theme.onSurface,
-      fontWeight: Typography.fontWeight.bold,
+      fontSize: 20,
+      color: "#000000",
+      fontWeight: "700",
     },
     completionBadge: {
       flexDirection: "row",
@@ -594,9 +617,9 @@ const styles = (theme: typeof Colors.light) =>
       borderRadius: Border.radius.full,
     },
     completionBadgeText: {
-      ...Typography.styles.labelSmall,
-      color: theme.success,
-      fontWeight: Typography.fontWeight.semibold,
+      fontSize: 12,
+      color: "#10B981",
+      fontWeight: "600",
     },
     listEmpty: {
       flexGrow: 1,
@@ -642,12 +665,12 @@ const styles = (theme: typeof Colors.light) =>
       gap: Spacing.xs,
     },
     itemName: {
-      ...Typography.styles.bodyLarge,
-      color: theme.onSurface,
-      fontWeight: Typography.fontWeight.medium,
+      fontSize: 18,
+      color: "#000000",
+      fontWeight: "500",
     },
     itemNameChecked: {
-      color: theme.onSurfaceVariant,
+      color: "#666666",
     },
     timeContainer: {
       flexDirection: "row",
@@ -655,8 +678,8 @@ const styles = (theme: typeof Colors.light) =>
       gap: Spacing.xs,
     },
     checkedTime: {
-      ...Typography.styles.bodySmall,
-      color: theme.onSurfaceVariant,
+      fontSize: 14,
+      color: "#666666",
     },
     itemRight: {
       marginLeft: Spacing.sm,
@@ -693,14 +716,15 @@ const styles = (theme: typeof Colors.light) =>
       marginBottom: Spacing["2xl"],
     },
     emptyTitle: {
-      ...Typography.styles.headlineMedium,
-      color: theme.onSurface,
+      fontSize: 20,
+      color: "#000000",
       marginBottom: Spacing.sm,
       textAlign: "center",
+      fontWeight: "600",
     },
     emptySubtext: {
-      ...Typography.styles.bodyMedium,
-      color: theme.onSurfaceVariant,
+      fontSize: 16,
+      color: "#666666",
       textAlign: "center",
       lineHeight: 24,
       marginBottom: Spacing["2xl"],
@@ -716,8 +740,8 @@ const styles = (theme: typeof Colors.light) =>
       ...Shadow.md,
     },
     emptyButtonText: {
-      ...Typography.styles.labelLarge,
-      color: theme.onPrimary,
-      fontWeight: Typography.fontWeight.semibold,
+      fontSize: 16,
+      color: "#FFFFFF",
+      fontWeight: "600",
     },
   });

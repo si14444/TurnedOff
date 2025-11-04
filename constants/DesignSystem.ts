@@ -11,25 +11,25 @@ export const Colors = {
   // Light Mode Colors
   light: {
     // Primary Colors - Main brand colors
-    primary: "#64748B", // Slate - Primary actions, key elements
-    primaryHover: "#475569", // Darker slate for hover states
-    primaryActive: "#334155", // Even darker for active/pressed states
+    primary: "#2563EB", // Bright Blue - Primary actions, key elements
+    primaryHover: "#1D4ED8", // Darker blue for hover states
+    primaryActive: "#1E40AF", // Even darker for active/pressed states
     onPrimary: "#FFFFFF", // Text/icons on primary color
-    primaryContainer: "#F1F5F9", // Background for elements related to primary
-    onPrimaryContainer: "#334155", // Text on primary container
+    primaryContainer: "#DBEAFE", // Light blue background
+    onPrimaryContainer: "#1E3A8A", // Dark blue text on primary container
 
     // Secondary Colors - Supporting actions
-    secondary: "#78716C", // Warm gray - Secondary actions
-    secondaryHover: "#57534E", // Darker warm gray
-    secondaryActive: "#44403C", // Darkest warm gray
+    secondary: "#7C3AED", // Purple - Secondary actions
+    secondaryHover: "#6D28D9", // Darker purple
+    secondaryActive: "#5B21B6", // Darkest purple
     onSecondary: "#FFFFFF", // Text/icons on secondary color
-    secondaryContainer: "#E7E5E4", // Background for elements related to secondary
-    onSecondaryContainer: "#44403C", // Text on secondary container
+    secondaryContainer: "#EDE9FE", // Light purple background
+    onSecondaryContainer: "#4C1D95", // Dark purple text
 
     // Tertiary Colors - Accent elements
-    tertiary: "#94A3B8", // Light slate - Subtle accents
-    tertiaryHover: "#64748B", // Medium slate
-    tertiaryActive: "#475569", // Dark slate
+    tertiary: "#059669", // Green - Subtle accents
+    tertiaryHover: "#047857", // Darker green
+    tertiaryActive: "#065F46", // Darkest green
     onTertiary: "#FFFFFF", // Text/icons on tertiary color
 
     // Surface Colors - Backgrounds and containers
@@ -37,39 +37,39 @@ export const Colors = {
     surfaceVariant: "#F8FAFC", // Variant surface (subtle difference)
     surfaceContainer: "#F1F5F9", // Container backgrounds
     surfaceContainerHigh: "#E2E8F0", // Higher elevation containers
-    onSurface: "#0F172A", // Text on surface
-    onSurfaceVariant: "#475569", // Secondary text on surface
+    onSurface: "#0F172A", // Text on surface (very dark, almost black)
+    onSurfaceVariant: "#334155", // Secondary text on surface (dark gray)
 
     // Background Colors - Screen backgrounds
-    background: "#FFFFFF", // Main screen background
-    backgroundVariant: "#F8FAFC", // Variant background
-    onBackground: "#0F172A", // Text on background
+    background: "#F8FAFC", // Light gray background (not pure white)
+    backgroundVariant: "#F1F5F9", // Slightly darker variant
+    onBackground: "#0F172A", // Text on background (very dark)
 
     // State Colors - Success, Warning, Error, Info
-    success: "#6B7280", // Cool gray - Success states
+    success: "#10B981", // Green - Success states
     onSuccess: "#FFFFFF", // Text on success
-    successContainer: "#F3F4F6", // Success background container
-    onSuccessContainer: "#1F2937", // Text on success container
+    successContainer: "#D1FAE5", // Light green background
+    onSuccessContainer: "#065F46", // Dark green text
 
-    warning: "#A8A29E", // Warm gray - Warning states
-    onWarning: "#1C1917", // Text on warning
-    warningContainer: "#F5F5F4", // Warning background container
-    onWarningContainer: "#292524", // Text on warning container
+    warning: "#F59E0B", // Amber - Warning states
+    onWarning: "#FFFFFF", // Text on warning
+    warningContainer: "#FEF3C7", // Light amber background
+    onWarningContainer: "#92400E", // Dark amber text
 
-    error: "#757575", // Gray - Error states
+    error: "#EF4444", // Red - Error states
     onError: "#FFFFFF", // Text on error
-    errorContainer: "#F5F5F5", // Error background container
-    onErrorContainer: "#212121", // Text on error container
+    errorContainer: "#FEE2E2", // Light red background
+    onErrorContainer: "#991B1B", // Dark red text
 
-    info: "#94A3B8", // Slate - Info states
+    info: "#3B82F6", // Blue - Info states
     onInfo: "#FFFFFF", // Text on info
-    infoContainer: "#F1F5F9", // Info background container
-    onInfoContainer: "#1E293B", // Text on info container
+    infoContainer: "#DBEAFE", // Light blue background
+    onInfoContainer: "#1E3A8A", // Dark blue text
 
     // Outline & Border Colors
-    outline: "#E2E8F0", // Default borders
-    outlineVariant: "#CBD5E1", // Variant borders (more prominent)
-    outlineStrong: "#94A3B8", // Strong borders
+    outline: "#CBD5E1", // Default borders (more visible)
+    outlineVariant: "#94A3B8", // Variant borders (more prominent)
+    outlineStrong: "#64748B", // Strong borders (very visible)
 
     // Scrim & Overlay
     scrim: "rgba(0, 0, 0, 0.5)", // Modal/dialog overlay
@@ -80,79 +80,79 @@ export const Colors = {
     onDisabled: "#94A3B8", // Text on disabled
 
     // Interactive Elements
-    hover: "#F8FAFC", // Hover background overlay
-    pressed: "#F1F5F9", // Pressed background overlay
-    focus: "#64748B", // Focus ring color
-    ripple: "rgba(100, 116, 139, 0.12)", // Ripple effect
+    hover: "#F1F5F9", // Hover background overlay
+    pressed: "#E2E8F0", // Pressed background overlay
+    focus: "#2563EB", // Focus ring color (bright blue)
+    ripple: "rgba(37, 99, 235, 0.12)", // Ripple effect (blue)
 
     // Dividers
-    divider: "#E2E8F0", // Divider lines
-    dividerSubtle: "#F1F5F9", // Subtle dividers
-    dividerStrong: "#CBD5E1", // Strong dividers
+    divider: "#CBD5E1", // Divider lines (more visible)
+    dividerSubtle: "#E2E8F0", // Subtle dividers
+    dividerStrong: "#94A3B8", // Strong dividers (very visible)
   },
 
   // Dark Mode Colors
   dark: {
     // Primary Colors
-    primary: "#94A3B8", // Lighter slate for dark mode
-    primaryHover: "#CBD5E1", // Lighter on hover
-    primaryActive: "#E2E8F0", // Lightest on active
-    onPrimary: "#0F172A", // Dark text on primary
-    primaryContainer: "#334155", // Background for elements related to primary
-    onPrimaryContainer: "#E2E8F0", // Text on primary container
+    primary: "#60A5FA", // Bright blue for dark mode
+    primaryHover: "#93C5FD", // Lighter blue on hover
+    primaryActive: "#BFDBFE", // Lightest blue on active
+    onPrimary: "#1E3A8A", // Dark blue text on primary
+    primaryContainer: "#1E3A8A", // Dark blue background
+    onPrimaryContainer: "#DBEAFE", // Light blue text on container
 
     // Secondary Colors
-    secondary: "#A8A29E", // Lighter warm gray
-    secondaryHover: "#D6D3D1", // Lighter on hover
-    secondaryActive: "#E7E5E4", // Lightest on active
-    onSecondary: "#1C1917", // Dark text on secondary
-    secondaryContainer: "#44403C", // Background for elements related to secondary
-    onSecondaryContainer: "#E7E5E4", // Text on secondary container
+    secondary: "#A78BFA", // Purple for dark mode
+    secondaryHover: "#C4B5FD", // Lighter purple
+    secondaryActive: "#DDD6FE", // Lightest purple
+    onSecondary: "#4C1D95", // Dark purple text
+    secondaryContainer: "#4C1D95", // Dark purple background
+    onSecondaryContainer: "#EDE9FE", // Light purple text
 
     // Tertiary Colors
-    tertiary: "#64748B", // Medium slate
-    tertiaryHover: "#94A3B8", // Lighter on hover
-    tertiaryActive: "#CBD5E1", // Lightest on active
-    onTertiary: "#0F172A", // Dark text on tertiary
+    tertiary: "#34D399", // Green for dark mode
+    tertiaryHover: "#6EE7B7", // Lighter green
+    tertiaryActive: "#A7F3D0", // Lightest green
+    onTertiary: "#065F46", // Dark green text
 
     // Surface Colors
-    surface: "#1E293B", // Main surface (cards, sheets)
-    surfaceVariant: "#0F172A", // Variant surface (darker)
+    surface: "#1E293B", // Dark surface (cards, sheets)
+    surfaceVariant: "#0F172A", // Darker variant
     surfaceContainer: "#334155", // Container backgrounds
     surfaceContainerHigh: "#475569", // Higher elevation containers
-    onSurface: "#E2E8F0", // Text on surface
-    onSurfaceVariant: "#94A3B8", // Secondary text on surface
+    onSurface: "#F1F5F9", // Light text on surface (very light)
+    onSurfaceVariant: "#CBD5E1", // Secondary light text
 
     // Background Colors
-    background: "#0F172A", // Main screen background
-    backgroundVariant: "#1E293B", // Variant background
-    onBackground: "#E2E8F0", // Text on background
+    background: "#0F172A", // Very dark background
+    backgroundVariant: "#1E293B", // Slightly lighter variant
+    onBackground: "#F1F5F9", // Light text on background (very light)
 
     // State Colors
-    success: "#9CA3AF", // Lighter cool gray
-    onSuccess: "#111827", // Dark text
-    successContainer: "#374151", // Success background
-    onSuccessContainer: "#D1D5DB", // Light text on container
+    success: "#34D399", // Green for dark mode
+    onSuccess: "#FFFFFF", // White text
+    successContainer: "#065F46", // Dark green background
+    onSuccessContainer: "#D1FAE5", // Light green text
 
-    warning: "#D6D3D1", // Light warm gray
-    onWarning: "#1C1917", // Dark text
-    warningContainer: "#57534E", // Warning background
-    onWarningContainer: "#F5F5F4", // Light text on container
+    warning: "#FBBF24", // Amber for dark mode
+    onWarning: "#FFFFFF", // White text
+    warningContainer: "#92400E", // Dark amber background
+    onWarningContainer: "#FEF3C7", // Light amber text
 
-    error: "#BDBDBD", // Light gray
-    onError: "#212121", // Dark text
-    errorContainer: "#616161", // Error background
-    onErrorContainer: "#F5F5F5", // Light text on container
+    error: "#F87171", // Red for dark mode
+    onError: "#FFFFFF", // White text
+    errorContainer: "#991B1B", // Dark red background
+    onErrorContainer: "#FEE2E2", // Light red text
 
-    info: "#CBD5E1", // Light slate
-    onInfo: "#0F172A", // Dark text
-    infoContainer: "#475569", // Info background
-    onInfoContainer: "#E2E8F0", // Light text on container
+    info: "#60A5FA", // Blue for dark mode
+    onInfo: "#FFFFFF", // White text
+    infoContainer: "#1E3A8A", // Dark blue background
+    onInfoContainer: "#DBEAFE", // Light blue text
 
     // Outline & Border Colors
-    outline: "#334155", // Default borders
-    outlineVariant: "#475569", // Variant borders
-    outlineStrong: "#64748B", // Strong borders
+    outline: "#475569", // Default borders (more visible)
+    outlineVariant: "#64748B", // Variant borders (more prominent)
+    outlineStrong: "#94A3B8", // Strong borders (very visible)
 
     // Scrim & Overlay
     scrim: "rgba(0, 0, 0, 0.7)", // Darker overlay for dark mode
@@ -165,13 +165,13 @@ export const Colors = {
     // Interactive Elements
     hover: "#1E293B", // Hover background overlay
     pressed: "#334155", // Pressed background overlay
-    focus: "#94A3B8", // Focus ring color
-    ripple: "rgba(148, 163, 184, 0.12)", // Ripple effect
+    focus: "#60A5FA", // Focus ring color (bright blue)
+    ripple: "rgba(96, 165, 250, 0.12)", // Ripple effect (blue)
 
     // Dividers
-    divider: "#334155", // Divider lines
-    dividerSubtle: "#1E293B", // Subtle dividers
-    dividerStrong: "#475569", // Strong dividers
+    divider: "#475569", // Divider lines (more visible)
+    dividerSubtle: "#334155", // Subtle dividers
+    dividerStrong: "#64748B", // Strong dividers (very visible)
   },
 };
 
