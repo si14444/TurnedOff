@@ -346,13 +346,13 @@ const styles = (theme: typeof Colors.light) =>
       backgroundColor: "#F8FAFC",
     },
     listContent: {
-      paddingHorizontal: Spacing.lg,
+      paddingHorizontal: 0,
       paddingBottom: Spacing.xl,
       backgroundColor: "#F8FAFC",
     },
     // Welcome Section
     welcomeSection: {
-      padding: Spacing.xl,
+      paddingHorizontal: Spacing.xl,
       paddingTop: Spacing.xl,
       paddingBottom: Spacing.xl,
       backgroundColor: "#FFFFFF",
@@ -377,7 +377,7 @@ const styles = (theme: typeof Colors.light) =>
     },
     // Stats Section
     statsSection: {
-      paddingHorizontal: Spacing.lg,
+      paddingHorizontal: Spacing.xl,
       paddingTop: Spacing.xl,
       gap: Spacing.lg,
     },
@@ -451,7 +451,7 @@ const styles = (theme: typeof Colors.light) =>
     },
     // Native Ad
     nativeAdContainer: {
-      marginHorizontal: Spacing.lg,
+      marginHorizontal: Spacing.xl,
       marginTop: Spacing.xl,
       backgroundColor: "#F8FAFC",
       borderRadius: 20,
@@ -504,7 +504,7 @@ const styles = (theme: typeof Colors.light) =>
     },
     // Quick Actions
     quickActionsSection: {
-      paddingHorizontal: Spacing.lg,
+      paddingHorizontal: Spacing.xl,
       paddingTop: Spacing.xl,
       gap: Spacing.lg,
     },
@@ -544,7 +544,7 @@ const styles = (theme: typeof Colors.light) =>
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      paddingHorizontal: Spacing.lg,
+      paddingHorizontal: Spacing.xl,
       paddingTop: Spacing.xl,
       paddingBottom: Spacing.md,
     },
@@ -577,6 +577,8 @@ const styles = (theme: typeof Colors.light) =>
       justifyContent: "space-between",
       backgroundColor: "#FFFFFF",
       padding: Spacing.xl,
+      marginHorizontal: Spacing.xl,
+      marginBottom: Spacing.md,
       borderRadius: 20,
       borderWidth: 0,
       ...Shadow.md,
