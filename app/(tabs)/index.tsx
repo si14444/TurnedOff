@@ -25,10 +25,28 @@ export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
 
+  // Initialize greeting and date immediately
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "좋은 아침이에요";
+    if (hour < 18) return "좋은 오후에요";
+    return "좋은 저녁이에요";
+  };
+
+  const getFormattedDate = () => {
+    const today = new Date();
+    return today.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long",
+    });
+  };
+
   const [items, setItems] = useState<ChecklistItem[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [currentDate, setCurrentDate] = useState("");
-  const [greeting, setGreeting] = useState("");
+  const [currentDate, setCurrentDate] = useState(getFormattedDate());
+  const [greeting, setGreeting] = useState(getGreeting());
 
   const loadItems = async () => {
     try {
@@ -36,24 +54,9 @@ export default function HomeScreen() {
       const loadedItems = await getChecklistItems();
       setItems(loadedItems.sort((a, b) => a.order - b.order));
 
-      const today = new Date();
-      const dateStr = today.toLocaleDateString("ko-KR", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        weekday: "long",
-      });
-      setCurrentDate(dateStr);
-
-      // Set greeting based on time
-      const hour = today.getHours();
-      if (hour < 12) {
-        setGreeting("좋은 아침이에요");
-      } else if (hour < 18) {
-        setGreeting("좋은 오후에요");
-      } else {
-        setGreeting("좋은 저녁이에요");
-      }
+      // Update greeting and date on refresh
+      setCurrentDate(getFormattedDate());
+      setGreeting(getGreeting());
     } catch (error) {
       console.error("Error loading items:", error);
       Alert.alert("오류", "체크리스트를 불러오는 중 문제가 발생했습니다.");
