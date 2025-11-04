@@ -17,13 +17,7 @@ import {
 } from "react-native";
 
 import { useColorScheme } from "@/components/useColorScheme";
-import {
-  Border,
-  Colors,
-  Shadow,
-  Spacing,
-  Typography,
-} from "@/constants/DesignSystem";
+import { Border, Colors, Shadow, Spacing } from "@/constants/DesignSystem";
 import { checkAndResetIfNeeded, getChecklistItems } from "@/services/storage";
 import { ChecklistItem } from "@/types";
 
@@ -229,10 +223,6 @@ export default function HomeScreen() {
     <>
       {/* Welcome Section */}
       <View style={styles(theme).welcomeSection}>
-        <View style={styles(theme).greetingContainer}>
-          <Text style={styles(theme).greetingText}>{greeting}</Text>
-          <Ionicons name="sunny" size={24} color={theme.primary} />
-        </View>
         <Text style={styles(theme).dateText}>{currentDate}</Text>
       </View>
 
@@ -264,7 +254,7 @@ export default function HomeScreen() {
           </View>
 
           {/* Quick Stats */}
-          <View style={styles(theme).quickStats}>
+          {/* <View style={styles(theme).quickStats}>
             <View style={styles(theme).quickStatItem}>
               <Ionicons name="list" size={18} color={theme.onSurfaceVariant} />
               <Text style={styles(theme).quickStatValue}>{totalCount}</Text>
@@ -276,7 +266,7 @@ export default function HomeScreen() {
               <Text style={styles(theme).quickStatValue}>{completedCount}</Text>
               <Text style={styles(theme).quickStatLabel}>완료</Text>
             </View>
-          </View>
+          </View> */}
         </View>
       )}
 
@@ -303,48 +293,6 @@ export default function HomeScreen() {
       </View>
 
       {/* Quick Actions */}
-      {totalCount > 0 && (
-        <View style={styles(theme).quickActionsSection}>
-          <Text style={styles(theme).sectionTitle}>빠른 실행</Text>
-          <View style={styles(theme).quickActionsGrid}>
-            <Pressable
-              style={({ pressed }) => [
-                styles(theme).quickActionButton,
-                pressed && { opacity: 0.7 },
-              ]}
-              onPress={() => router.push("/(tabs)/manage")}
-            >
-              <View
-                style={[
-                  styles(theme).quickActionIcon,
-                  { backgroundColor: theme.primaryContainer },
-                ]}
-              >
-                <Ionicons name="add" size={20} color={theme.primary} />
-              </View>
-              <Text style={styles(theme).quickActionText}>항목 추가</Text>
-            </Pressable>
-
-            <Pressable
-              style={({ pressed }) => [
-                styles(theme).quickActionButton,
-                pressed && { opacity: 0.7 },
-              ]}
-              onPress={onRefresh}
-            >
-              <View
-                style={[
-                  styles(theme).quickActionIcon,
-                  { backgroundColor: theme.secondaryContainer },
-                ]}
-              >
-                <Ionicons name="refresh" size={20} color={theme.secondary} />
-              </View>
-              <Text style={styles(theme).quickActionText}>새로고침</Text>
-            </Pressable>
-          </View>
-        </View>
-      )}
 
       {/* Checklist Title */}
       {totalCount > 0 && (
@@ -395,21 +343,22 @@ const styles = (theme: typeof Colors.light) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.background,
+      backgroundColor: "#F8FAFC",
     },
     listContent: {
       paddingHorizontal: Spacing.lg,
       paddingBottom: Spacing.xl,
-      backgroundColor: theme.background,
+      backgroundColor: "#F8FAFC",
     },
     // Welcome Section
     welcomeSection: {
       padding: Spacing.xl,
-      paddingTop: Spacing["2xl"],
+      paddingTop: Spacing.xl,
+      paddingBottom: Spacing.xl,
       backgroundColor: "#FFFFFF",
-      borderBottomLeftRadius: Border.radius["2xl"],
-      borderBottomRightRadius: Border.radius["2xl"],
-      ...Shadow.sm,
+      borderBottomLeftRadius: 28,
+      borderBottomRightRadius: 28,
+      ...Shadow.md,
     },
     greetingContainer: {
       flexDirection: "row",
@@ -429,16 +378,15 @@ const styles = (theme: typeof Colors.light) =>
     // Stats Section
     statsSection: {
       paddingHorizontal: Spacing.lg,
-      paddingTop: Spacing.lg,
-      gap: Spacing.md,
+      paddingTop: Spacing.xl,
+      gap: Spacing.lg,
     },
     statCard: {
-      backgroundColor: theme.surface,
-      padding: Spacing.lg,
-      borderRadius: Border.radius.xl,
-      borderWidth: 1,
-      borderColor: theme.outline,
-      ...Shadow.md,
+      backgroundColor: "#FFFFFF",
+      padding: Spacing.xl,
+      borderRadius: 20,
+      borderWidth: 0,
+      ...Shadow.lg,
     },
     statCardHeader: {
       flexDirection: "row",
@@ -476,12 +424,11 @@ const styles = (theme: typeof Colors.light) =>
     },
     quickStats: {
       flexDirection: "row",
-      backgroundColor: theme.surface,
-      borderRadius: Border.radius.xl,
-      borderWidth: 1,
-      borderColor: theme.outline,
+      backgroundColor: "#FFFFFF",
+      borderRadius: 20,
+      borderWidth: 0,
       overflow: "hidden",
-      ...Shadow.sm,
+      ...Shadow.lg,
     },
     quickStatItem: {
       flex: 1,
@@ -505,13 +452,13 @@ const styles = (theme: typeof Colors.light) =>
     // Native Ad
     nativeAdContainer: {
       marginHorizontal: Spacing.lg,
-      marginTop: Spacing.lg,
-      backgroundColor: theme.surfaceVariant,
-      borderRadius: Border.radius.xl,
-      borderWidth: 1,
-      borderColor: theme.outlineVariant,
+      marginTop: Spacing.xl,
+      backgroundColor: "#F8FAFC",
+      borderRadius: 20,
+      borderWidth: 0,
       overflow: "hidden",
       position: "relative",
+      ...Shadow.md,
     },
     adBadge: {
       position: "absolute",
@@ -558,8 +505,8 @@ const styles = (theme: typeof Colors.light) =>
     // Quick Actions
     quickActionsSection: {
       paddingHorizontal: Spacing.lg,
-      paddingTop: Spacing.lg,
-      gap: Spacing.md,
+      paddingTop: Spacing.xl,
+      gap: Spacing.lg,
     },
     sectionTitle: {
       fontSize: 16,
@@ -572,19 +519,18 @@ const styles = (theme: typeof Colors.light) =>
     },
     quickActionButton: {
       flex: 1,
-      backgroundColor: theme.surface,
-      padding: Spacing.lg,
-      borderRadius: Border.radius.xl,
-      borderWidth: 1,
-      borderColor: theme.outline,
+      backgroundColor: "#FFFFFF",
+      padding: Spacing.xl,
+      borderRadius: 20,
+      borderWidth: 0,
       alignItems: "center",
-      gap: Spacing.sm,
-      ...Shadow.sm,
+      gap: Spacing.md,
+      ...Shadow.md,
     },
     quickActionIcon: {
-      width: 48,
-      height: 48,
-      borderRadius: Border.radius.lg,
+      width: 52,
+      height: 52,
+      borderRadius: 16,
       alignItems: "center",
       justifyContent: "center",
     },
@@ -623,21 +569,20 @@ const styles = (theme: typeof Colors.light) =>
     },
     listEmpty: {
       flexGrow: 1,
-      backgroundColor: theme.background,
+      backgroundColor: "#F8FAFC",
     },
     itemContainer: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      backgroundColor: theme.surface,
-      padding: Spacing.lg,
-      borderRadius: Border.radius.lg,
-      borderWidth: 1,
-      borderColor: theme.outline,
-      ...Shadow.sm,
+      backgroundColor: "#FFFFFF",
+      padding: Spacing.xl,
+      borderRadius: 20,
+      borderWidth: 0,
+      ...Shadow.md,
     },
     itemPressed: {
-      backgroundColor: theme.surfaceContainerHigh,
+      backgroundColor: "#F1F5F9",
       transform: [{ scale: 0.98 }],
     },
     itemLeft: {
@@ -656,9 +601,9 @@ const styles = (theme: typeof Colors.light) =>
     checkboxEmpty: {
       width: 28,
       height: 28,
-      borderRadius: Border.radius.full,
+      borderRadius: 14,
       borderWidth: 2,
-      borderColor: theme.outline,
+      borderColor: "#CBD5E1",
     },
     itemContent: {
       flex: 1,
@@ -733,11 +678,11 @@ const styles = (theme: typeof Colors.light) =>
       flexDirection: "row",
       alignItems: "center",
       gap: Spacing.sm,
-      backgroundColor: theme.primary,
+      backgroundColor: "#2563EB",
       paddingVertical: Spacing.lg,
-      paddingHorizontal: Spacing.xl + Spacing.sm,
-      borderRadius: Border.radius.lg,
-      ...Shadow.md,
+      paddingHorizontal: Spacing["2xl"],
+      borderRadius: 16,
+      ...Shadow.lg,
     },
     emptyButtonText: {
       fontSize: 16,
