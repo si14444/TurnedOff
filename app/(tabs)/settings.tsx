@@ -25,7 +25,6 @@ import {
   getSettings,
   updateDailyTime,
   updateNotificationSettings,
-  updatePhotoRetentionSettings,
 } from "@/services/storage";
 import { AppSettings } from "@/types";
 
@@ -37,11 +36,7 @@ export default function SettingsScreen() {
   const [settings, setSettings] = useState<AppSettings>({
     dailyTime: "04:00",
     notifications: {
-      enabled: true,
-    },
-    photoRetention: {
-      keepPhotos: false,
-      autoDeleteDays: 0,
+      enabled: false,
     },
   });
 
@@ -96,56 +91,6 @@ export default function SettingsScreen() {
       Alert.alert("오류", "설정을 저장하는 중 문제가 발생했습니다.");
       loadSettings();
     }
-  };
-
-  const handleKeepPhotosToggle = async (value: boolean) => {
-    const updated = { ...settings.photoRetention, keepPhotos: value };
-    setSettings({ ...settings, photoRetention: updated });
-
-    const success = await updatePhotoRetentionSettings({ keepPhotos: value });
-    if (!success) {
-      Alert.alert("오류", "설정을 저장하는 중 문제가 발생했습니다.");
-      loadSettings();
-    }
-  };
-
-  const handleAutoDeleteDaysChange = (days: number) => {
-    Alert.prompt(
-      "사진 보관 기간",
-      "사진을 보관할 일수를 입력하세요 (0 = 당일만 보관)",
-      [
-        {
-          text: "취소",
-          style: "cancel",
-        },
-        {
-          text: "확인",
-          onPress: async (value?: string) => {
-            const numValue = parseInt(value || "0", 10);
-            if (isNaN(numValue) || numValue < 0) {
-              Alert.alert("오류", "0 이상의 숫자를 입력해주세요.");
-              return;
-            }
-
-            const updated = {
-              ...settings.photoRetention,
-              autoDeleteDays: numValue,
-            };
-            setSettings({ ...settings, photoRetention: updated });
-
-            const success = await updatePhotoRetentionSettings({
-              autoDeleteDays: numValue,
-            });
-            if (!success) {
-              Alert.alert("오류", "설정을 저장하는 중 문제가 발생했습니다.");
-              loadSettings();
-            }
-          },
-        },
-      ],
-      "plain-text",
-      days.toString()
-    );
   };
 
   if (isLoading) {
