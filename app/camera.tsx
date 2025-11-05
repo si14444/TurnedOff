@@ -9,7 +9,7 @@ import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as FileSystem from 'expo-file-system';
+import { Directory, File, Paths } from 'expo-file-system';
 
 import { checkItem } from '@/services/storage';
 import { Colors, Typography, Spacing, Border, Shadow } from '@/constants/DesignSystem';
@@ -89,22 +89,22 @@ export default function CameraScreen() {
     if (!capturedPhoto || !itemId) return;
 
     try {
-      const photosDir = `${(FileSystem as any).documentDirectory}photos/`;
-      const dirInfo = await FileSystem.getInfoAsync(photosDir);
+      // Use the new FileSystem API with Directory
+      const photosDir = new Directory(Paths.document, 'photos');
 
-      if (!dirInfo.exists) {
-        await FileSystem.makeDirectoryAsync(photosDir, { intermediates: true });
+      // Create directory if it doesn't exist
+      if (!(await photosDir.exists)) {
+        await photosDir.create();
       }
 
       const fileName = `${itemId}_${Date.now()}.jpg`;
-      const newPath = `${photosDir}${fileName}`;
+      const photoFile = new File(photosDir, fileName);
 
-      await FileSystem.moveAsync({
-        from: capturedPhoto,
-        to: newPath,
-      });
+      // Copy the captured photo to the permanent location
+      const tempFile = new File(capturedPhoto);
+      await tempFile.copy(photoFile);
 
-      const success = await checkItem(itemId, newPath);
+      const success = await checkItem(itemId, photoFile.uri);
 
       if (success) {
         router.back();

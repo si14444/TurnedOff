@@ -4,11 +4,24 @@
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ChecklistItem, DailyResetData } from '../types';
+import { Directory, File, Paths } from 'expo-file-system';
+import { ChecklistItem, DailyResetData, AppSettings } from '../types';
 
 const STORAGE_KEYS = {
   CHECKLIST_ITEMS: '@turnedoff:checklist_items',
   DAILY_RESET: '@turnedoff:daily_reset',
+  SETTINGS: '@turnedoff:settings',
+};
+
+const DEFAULT_SETTINGS: AppSettings = {
+  dailyTime: '04:00',
+  notifications: {
+    enabled: true,
+  },
+  photoRetention: {
+    keepPhotos: false,
+    autoDeleteDays: 0,
+  },
 };
 
 // ============================================================================
@@ -143,9 +156,43 @@ export const setLastResetDate = async (date: string): Promise<boolean> => {
   }
 };
 
+/**
+ * Clean up old photos from the photos directory
+ */
+const cleanupOldPhotos = async (): Promise<void> => {
+  try {
+    const photosDir = new Directory(Paths.document, 'photos');
+
+    if (!(await photosDir.exists)) {
+      return; // Nothing to clean up
+    }
+
+    // Get all files in the photos directory
+    const files = await photosDir.list();
+
+    // Delete all photo files
+    for (const file of files) {
+      try {
+        if (file instanceof File) {
+          await file.delete();
+        }
+      } catch (error) {
+        console.error(`Error deleting photo file:`, error);
+      }
+    }
+
+    console.log(`Cleaned up ${files.length} photo files`);
+  } catch (error) {
+    console.error('Error cleaning up photos:', error);
+  }
+};
+
 export const resetDailyChecks = async (): Promise<boolean> => {
   try {
     const items = await getChecklistItems();
+
+    // Clean up all old photos before resetting
+    await cleanupOldPhotos();
 
     // Reset all items
     const resetItems = items.map(item => ({
@@ -187,6 +234,96 @@ export const checkAndResetIfNeeded = async (): Promise<boolean> => {
 };
 
 // ============================================================================
+// Settings Management
+// ============================================================================
+
+export const getSettings = async (): Promise<AppSettings> => {
+  try {
+    const data = await AsyncStorage.getItem(STORAGE_KEYS.SETTINGS);
+    if (!data) return DEFAULT_SETTINGS;
+
+    const settings: AppSettings = JSON.parse(data);
+    // Merge with defaults to ensure all properties exist
+    return {
+      dailyTime: settings.dailyTime || DEFAULT_SETTINGS.dailyTime,
+      notifications: {
+        ...DEFAULT_SETTINGS.notifications,
+        ...settings.notifications,
+      },
+      photoRetention: {
+        ...DEFAULT_SETTINGS.photoRetention,
+        ...settings.photoRetention,
+      },
+    };
+  } catch (error) {
+    console.error('Error loading settings:', error);
+    return DEFAULT_SETTINGS;
+  }
+};
+
+export const saveSettings = async (settings: AppSettings): Promise<boolean> => {
+  try {
+    await AsyncStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+    return true;
+  } catch (error) {
+    console.error('Error saving settings:', error);
+    return false;
+  }
+};
+
+export const updateDailyTime = async (dailyTime: string): Promise<boolean> => {
+  try {
+    const settings = await getSettings();
+    const updatedSettings: AppSettings = {
+      ...settings,
+      dailyTime,
+    };
+    return await saveSettings(updatedSettings);
+  } catch (error) {
+    console.error('Error updating daily time:', error);
+    return false;
+  }
+};
+
+export const updateNotificationSettings = async (
+  notifications: Partial<AppSettings['notifications']>
+): Promise<boolean> => {
+  try {
+    const settings = await getSettings();
+    const updatedSettings: AppSettings = {
+      ...settings,
+      notifications: {
+        ...settings.notifications,
+        ...notifications,
+      },
+    };
+    return await saveSettings(updatedSettings);
+  } catch (error) {
+    console.error('Error updating notification settings:', error);
+    return false;
+  }
+};
+
+export const updatePhotoRetentionSettings = async (
+  photoRetention: Partial<AppSettings['photoRetention']>
+): Promise<boolean> => {
+  try {
+    const settings = await getSettings();
+    const updatedSettings: AppSettings = {
+      ...settings,
+      photoRetention: {
+        ...settings.photoRetention,
+        ...photoRetention,
+      },
+    };
+    return await saveSettings(updatedSettings);
+  } catch (error) {
+    console.error('Error updating photo retention settings:', error);
+    return false;
+  }
+};
+
+// ============================================================================
 // Utility Functions
 // ============================================================================
 
@@ -195,6 +332,7 @@ export const clearAllData = async (): Promise<boolean> => {
     await AsyncStorage.multiRemove([
       STORAGE_KEYS.CHECKLIST_ITEMS,
       STORAGE_KEYS.DAILY_RESET,
+      STORAGE_KEYS.SETTINGS,
     ]);
     return true;
   } catch (error) {
