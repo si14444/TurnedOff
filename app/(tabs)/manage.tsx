@@ -3,36 +3,38 @@
  * Beautiful interface for managing checklist items
  */
 
-import React, { useState, useCallback } from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "expo-router";
+import React, { useCallback, useState } from "react";
 import {
-  View,
-  Text,
-  FlatList,
-  Pressable,
-  TextInput,
   Alert,
+  FlatList,
   KeyboardAvoidingView,
   Platform,
-} from 'react-native';
-import { StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useFocusEffect } from 'expo-router';
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
-import { ChecklistItem } from '@/types';
+import { useColorScheme } from "@/components/useColorScheme";
+import { Colors, Shadow, Spacing } from "@/constants/DesignSystem";
 import {
-  getChecklistItems,
   createChecklistItem,
   deleteChecklistItem,
-} from '@/services/storage';
-import { Colors, Typography, Spacing, Border, Shadow } from '@/constants/DesignSystem';
-import { useColorScheme } from '@/components/useColorScheme';
+  getChecklistItems,
+} from "@/services/storage";
+import { ChecklistItem } from "@/types";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ManageScreen() {
   const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
+  const insets = useSafeAreaInsets();
+  const theme = Colors.light; // Force light mode
 
   const [items, setItems] = useState<ChecklistItem[]>([]);
-  const [newItemName, setNewItemName] = useState('');
+  const [newItemName, setNewItemName] = useState("");
   const [isAdding, setIsAdding] = useState(false);
 
   const loadItems = async () => {
@@ -40,8 +42,8 @@ export default function ManageScreen() {
       const loadedItems = await getChecklistItems();
       setItems(loadedItems.sort((a, b) => a.order - b.order));
     } catch (error) {
-      console.error('Error loading items:', error);
-      Alert.alert('오류', '체크리스트를 불러오는 중 문제가 발생했습니다.');
+      console.error("Error loading items:", error);
+      Alert.alert("오류", "체크리스트를 불러오는 중 문제가 발생했습니다.");
     }
   };
 
@@ -55,7 +57,7 @@ export default function ManageScreen() {
     const trimmedName = newItemName.trim();
 
     if (!trimmedName) {
-      Alert.alert('입력 오류', '항목 이름을 입력해주세요.');
+      Alert.alert("입력 오류", "항목 이름을 입력해주세요.");
       return;
     }
 
@@ -65,13 +67,13 @@ export default function ManageScreen() {
 
       if (newItem) {
         setItems([...items, newItem]);
-        setNewItemName('');
+        setNewItemName("");
       } else {
-        Alert.alert('오류', '항목 추가 중 문제가 발생했습니다.');
+        Alert.alert("오류", "항목 추가 중 문제가 발생했습니다.");
       }
     } catch (error) {
-      console.error('Error adding item:', error);
-      Alert.alert('오류', '항목 추가 중 문제가 발생했습니다.');
+      console.error("Error adding item:", error);
+      Alert.alert("오류", "항목 추가 중 문제가 발생했습니다.");
     } finally {
       setIsAdding(false);
     }
@@ -79,28 +81,28 @@ export default function ManageScreen() {
 
   const handleDeleteItem = (item: ChecklistItem) => {
     Alert.alert(
-      '삭제 확인',
+      "삭제 확인",
       `"${item.name}" 항목을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`,
       [
         {
-          text: '취소',
-          style: 'cancel',
+          text: "취소",
+          style: "cancel",
         },
         {
-          text: '삭제',
-          style: 'destructive',
+          text: "삭제",
+          style: "destructive",
           onPress: async () => {
             try {
               const success = await deleteChecklistItem(item.id);
 
               if (success) {
-                setItems(items.filter(i => i.id !== item.id));
+                setItems(items.filter((i) => i.id !== item.id));
               } else {
-                Alert.alert('오류', '항목 삭제 중 문제가 발생했습니다.');
+                Alert.alert("오류", "항목 삭제 중 문제가 발생했습니다.");
               }
             } catch (error) {
-              console.error('Error deleting item:', error);
-              Alert.alert('오류', '항목 삭제 중 문제가 발생했습니다.');
+              console.error("Error deleting item:", error);
+              Alert.alert("오류", "항목 삭제 중 문제가 발생했습니다.");
             }
           },
         },
@@ -108,12 +110,22 @@ export default function ManageScreen() {
     );
   };
 
-  const renderItem = ({ item, index }: { item: ChecklistItem; index: number }) => (
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: ChecklistItem;
+    index: number;
+  }) => (
     <View style={styles(theme).itemWrapper}>
       <View style={styles(theme).itemContainer}>
         {/* Drag Handle */}
         <View style={styles(theme).dragHandle}>
-          <Ionicons name="reorder-two" size={24} color={theme.onSurfaceVariant} />
+          <Ionicons
+            name="reorder-two"
+            size={24}
+            color={theme.onSurfaceVariant}
+          />
         </View>
 
         {/* Item Content */}
@@ -128,7 +140,8 @@ export default function ManageScreen() {
             styles(theme).deleteButton,
             pressed && styles(theme).deleteButtonPressed,
           ]}
-          onPress={() => handleDeleteItem(item)}>
+          onPress={() => handleDeleteItem(item)}
+        >
           <Ionicons name="trash-outline" size={20} color={theme.error} />
         </Pressable>
       </View>
@@ -138,11 +151,16 @@ export default function ManageScreen() {
   const renderEmpty = () => (
     <View style={styles(theme).emptyContainer}>
       <View style={styles(theme).emptyIconContainer}>
-        <Ionicons name="list-outline" size={80} color={theme.primary} opacity={0.3} />
+        <Ionicons
+          name="list-outline"
+          size={80}
+          color={theme.primary}
+          opacity={0.3}
+        />
       </View>
       <Text style={styles(theme).emptyTitle}>아직 항목이 없어요</Text>
       <Text style={styles(theme).emptySubtext}>
-        외출 전 확인하고 싶은 항목을{'\n'}
+        외출 전 확인하고 싶은 항목을{"\n"}
         아래에 추가해보세요
       </Text>
     </View>
@@ -160,15 +178,19 @@ export default function ManageScreen() {
   return (
     <KeyboardAvoidingView
       style={styles(theme).container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={100}>
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={100}
+    >
       {/* List */}
       <FlatList
+        style={{ paddingTop: insets.top }}
         data={items}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={
-          items.length === 0 ? styles(theme).listEmpty : styles(theme).listContent
+          items.length === 0
+            ? styles(theme).listEmpty
+            : styles(theme).listContent
         }
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={renderEmpty}
@@ -193,10 +215,12 @@ export default function ManageScreen() {
             style={({ pressed }) => [
               styles(theme).addButton,
               pressed && { opacity: 0.8, transform: [{ scale: 0.95 }] },
-              (!newItemName.trim() || isAdding) && styles(theme).addButtonDisabled,
+              (!newItemName.trim() || isAdding) &&
+                styles(theme).addButtonDisabled,
             ]}
             onPress={handleAddItem}
-            disabled={!newItemName.trim() || isAdding}>
+            disabled={!newItemName.trim() || isAdding}
+          >
             {isAdding ? (
               <Ionicons name="hourglass-outline" size={22} color="#94A3B8" />
             ) : (
@@ -213,41 +237,42 @@ const styles = (theme: typeof Colors.light) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.background,
+      backgroundColor: "#F8FAFC",
     },
     listContent: {
-      padding: Spacing.lg,
+      paddingHorizontal: 0,
+      paddingTop: Spacing.lg,
+      paddingBottom: Spacing.xl,
     },
     listEmpty: {
       flexGrow: 1,
     },
     headerContainer: {
       marginBottom: Spacing.lg,
-      flexDirection: 'row',
-      alignItems: 'baseline',
-      gap: Spacing.sm,
+      marginHorizontal: Spacing.xl,
     },
     headerTitle: {
-      ...Typography.styles.headlineLarge,
-      color: theme.onSurface,
-      fontWeight: Typography.fontWeight.bold,
+      fontSize: 24,
+      color: "#000000",
+      fontWeight: "700",
+      marginBottom: Spacing.xs,
     },
     headerSubtitle: {
-      ...Typography.styles.bodyLarge,
-      color: theme.onSurfaceVariant,
+      fontSize: 14,
+      color: "#666666",
     },
     itemWrapper: {
       marginBottom: Spacing.md,
+      marginHorizontal: Spacing.xl,
     },
     itemContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: theme.surface,
-      padding: Spacing.lg,
-      borderRadius: Border.radius.lg,
-      borderWidth: 1,
-      borderColor: theme.outline,
-      ...Shadow.sm,
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: "#FFFFFF",
+      padding: Spacing.xl,
+      borderRadius: 20,
+      borderWidth: 0,
+      ...Shadow.lg,
     },
     dragHandle: {
       marginRight: Spacing.md,
@@ -258,88 +283,88 @@ const styles = (theme: typeof Colors.light) =>
       gap: Spacing.xs,
     },
     itemName: {
-      ...Typography.styles.bodyLarge,
-      color: theme.onSurface,
-      fontWeight: Typography.fontWeight.medium,
+      fontSize: 18,
+      color: "#000000",
+      fontWeight: "600",
     },
     itemMeta: {
-      ...Typography.styles.bodySmall,
-      color: theme.onSurfaceVariant,
+      fontSize: 13,
+      color: "#999999",
     },
     deleteButton: {
       padding: Spacing.md,
-      borderRadius: Border.radius.lg,
-      backgroundColor: theme.errorContainer,
+      borderRadius: 12,
+      backgroundColor: "#FEE2E2",
       marginLeft: Spacing.sm,
     },
     deleteButtonPressed: {
-      backgroundColor: theme.error,
+      backgroundColor: "#FCA5A5",
       transform: [{ scale: 0.95 }],
     },
     emptyContainer: {
       flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: Spacing['4xl'],
-      paddingTop: Spacing['8xl'],
+      alignItems: "center",
+      justifyContent: "center",
+      padding: Spacing["4xl"],
+      paddingTop: Spacing["8xl"],
     },
     emptyIconContainer: {
       width: 120,
       height: 120,
-      borderRadius: Border.radius.full,
-      backgroundColor: theme.surfaceContainer,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: Spacing['2xl'],
+      borderRadius: 60,
+      backgroundColor: "#F1F5F9",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: Spacing["2xl"],
     },
     emptyTitle: {
-      ...Typography.styles.headlineMedium,
-      color: theme.onSurface,
+      fontSize: 22,
+      color: "#000000",
       marginBottom: Spacing.sm,
-      textAlign: 'center',
+      textAlign: "center",
+      fontWeight: "700",
     },
     emptySubtext: {
-      ...Typography.styles.bodyMedium,
-      color: theme.onSurfaceVariant,
-      textAlign: 'center',
+      fontSize: 16,
+      color: "#666666",
+      textAlign: "center",
       lineHeight: 24,
     },
     addSection: {
       padding: Spacing.lg,
       paddingBottom: Spacing.xl,
-      backgroundColor: theme.surface,
+      backgroundColor: "#FFFFFF",
       borderTopWidth: 1,
-      borderTopColor: theme.outline,
+      borderTopColor: "#E2E8F0",
       ...Shadow.lg,
     },
     addInputContainer: {
-      flexDirection: 'row',
+      flexDirection: "row",
       gap: Spacing.sm,
-      alignItems: 'center',
+      alignItems: "center",
     },
     input: {
-      ...Typography.styles.bodyMedium,
       flex: 1,
-      backgroundColor: theme.surface,
+      backgroundColor: "#FFFFFF",
       borderWidth: 2,
-      borderColor: theme.outlineVariant,
-      borderRadius: Border.radius.lg,
+      borderColor: "#CBD5E1",
+      borderRadius: 12,
       paddingVertical: Spacing.lg,
       paddingHorizontal: Spacing.lg,
-      color: theme.onSurface,
+      color: "#000000",
       fontSize: 16,
     },
     addButton: {
       width: 56,
       height: 56,
-      backgroundColor: theme.primary,
-      borderRadius: Border.radius.lg,
-      alignItems: 'center',
-      justifyContent: 'center',
+      backgroundColor: "#2563EB",
+      borderRadius: 12,
+      alignItems: "center",
+      justifyContent: "center",
       ...Shadow.md,
     },
     addButtonDisabled: {
-      backgroundColor: theme.surfaceContainer,
+      backgroundColor: "#E2E8F0",
       ...Shadow.none,
     },
   });

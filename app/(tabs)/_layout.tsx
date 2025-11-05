@@ -8,13 +8,14 @@ import { Colors } from "@/constants/DesignSystem";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
+  const theme = Colors.light; // Force light mode
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: theme.primary,
-        tabBarInactiveTintColor: theme.onSurfaceVariant,
+        tabBarActiveTintColor: "#2563EB",
+        tabBarInactiveTintColor: "#94A3B8",
+        headerShown: false,
         tabBarStyle: {
           backgroundColor: theme.surface,
           borderTopWidth: 1,
@@ -69,7 +70,7 @@ export default function TabLayout() {
           tabBarLabel: "관리",
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
-              name={focused ? "settings" : "settings-outline"}
+              name={focused ? "list" : "list-outline"}
               size={size}
               color={color}
             />

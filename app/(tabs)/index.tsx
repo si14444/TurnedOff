@@ -20,9 +20,12 @@ import { useColorScheme } from "@/components/useColorScheme";
 import { Border, Colors, Shadow, Spacing } from "@/constants/DesignSystem";
 import { checkAndResetIfNeeded, getChecklistItems } from "@/services/storage";
 import { ChecklistItem } from "@/types";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
+  const insets = useSafeAreaInsets();
+
   // Force light mode for debugging - text visibility issue
   const theme = Colors.light;
 
@@ -222,7 +225,12 @@ export default function HomeScreen() {
   const renderHeader = () => (
     <>
       {/* Welcome Section */}
-      <View style={styles(theme).welcomeSection}>
+      <View
+        style={[
+          styles(theme).welcomeSection,
+          { paddingTop: insets.top + Spacing.xl },
+        ]}
+      >
         <Text style={styles(theme).dateText}>{currentDate}</Text>
       </View>
 
