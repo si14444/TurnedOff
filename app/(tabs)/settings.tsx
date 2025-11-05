@@ -28,6 +28,8 @@ import {
   updateDailyTime,
   updateNotificationSettings,
 } from "@/services/storage";
+import { setupNotifications } from "@/services/notifications";
+import { registerDailyResetTask } from "@/services/backgroundTasks";
 import { AppSettings } from "@/types";
 
 export default function SettingsScreen() {
@@ -81,7 +83,12 @@ export default function SettingsScreen() {
     if (!success) {
       Alert.alert("오류", "설정을 저장하는 중 문제가 발생했습니다.");
       loadSettings();
+      return;
     }
+
+    // Reschedule notifications and background tasks with new time
+    await setupNotifications();
+    await registerDailyResetTask();
   };
 
   const handleNotificationToggle = async (value: boolean) => {
@@ -119,7 +126,11 @@ export default function SettingsScreen() {
     if (!success) {
       Alert.alert("오류", "설정을 저장하는 중 문제가 발생했습니다.");
       loadSettings();
+      return;
     }
+
+    // Update notification schedule
+    await setupNotifications();
   };
 
   if (isLoading) {

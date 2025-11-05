@@ -36,7 +36,16 @@
         {
           "cameraPermission": "아맞다 앱이 체크리스트 항목을 사진으로 인증하기 위해 카메라 접근 권한이 필요합니다."
         }
-      ]
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#ffffff"
+        }
+      ],
+      "expo-background-fetch",
+      "expo-task-manager"
     ],
     "experiments": {
       "typedRoutes": true

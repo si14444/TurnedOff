@@ -7,6 +7,9 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import { checkAndResetIfNeeded } from '@/services/storage';
+import { setupNotifications } from '@/services/notifications';
+import { registerDailyResetTask } from '@/services/backgroundTasks';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -37,6 +40,26 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  // Initialize app services on mount
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        // Check and perform daily reset if needed
+        await checkAndResetIfNeeded();
+
+        // Setup notifications based on settings
+        await setupNotifications();
+
+        // Register background task for daily reset
+        await registerDailyResetTask();
+      } catch (error) {
+        console.error('Error initializing app:', error);
+      }
+    };
+
+    initializeApp();
+  }, []);
 
   if (!loaded) {
     return null;
