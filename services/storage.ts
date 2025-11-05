@@ -18,10 +18,6 @@ const DEFAULT_SETTINGS: AppSettings = {
   notifications: {
     enabled: true,
   },
-  photoRetention: {
-    keepPhotos: false,
-    autoDeleteDays: 0,
-  },
 };
 
 // ============================================================================
@@ -250,10 +246,6 @@ export const getSettings = async (): Promise<AppSettings> => {
         ...DEFAULT_SETTINGS.notifications,
         ...settings.notifications,
       },
-      photoRetention: {
-        ...DEFAULT_SETTINGS.photoRetention,
-        ...settings.photoRetention,
-      },
     };
   } catch (error) {
     console.error('Error loading settings:', error);
@@ -304,24 +296,6 @@ export const updateNotificationSettings = async (
   }
 };
 
-export const updatePhotoRetentionSettings = async (
-  photoRetention: Partial<AppSettings['photoRetention']>
-): Promise<boolean> => {
-  try {
-    const settings = await getSettings();
-    const updatedSettings: AppSettings = {
-      ...settings,
-      photoRetention: {
-        ...settings.photoRetention,
-        ...photoRetention,
-      },
-    };
-    return await saveSettings(updatedSettings);
-  } catch (error) {
-    console.error('Error updating photo retention settings:', error);
-    return false;
-  }
-};
 
 // ============================================================================
 // Utility Functions

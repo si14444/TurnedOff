@@ -5,6 +5,7 @@
 
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
+import * as Notifications from "expo-notifications";
 import React, { useState } from "react";
 import {
   Alert,
@@ -15,6 +16,7 @@ import {
   Switch,
   Text,
   View,
+  Linking,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -83,6 +85,33 @@ export default function SettingsScreen() {
   };
 
   const handleNotificationToggle = async (value: boolean) => {
+    if (value) {
+      // 알림을 켜려고 할 때 권한 요청
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+
+      if (finalStatus !== "granted") {
+        Alert.alert(
+          "알림 권한 필요",
+          "알림을 받으려면 기기 설정에서 알림 권한을 허용해주세요.",
+          [
+            { text: "취소", style: "cancel" },
+            {
+              text: "설정으로 이동",
+              onPress: () => Linking.openSettings(),
+            },
+          ]
+        );
+        return;
+      }
+    }
+
+    // 권한이 있거나 알림을 끄는 경우 설정 저장
     const updated = { ...settings.notifications, enabled: value };
     setSettings({ ...settings, notifications: updated });
 
