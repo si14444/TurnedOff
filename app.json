@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "아맞다",
-    "slug": "아맞다",
+    "name": "아했나?",
+    "slug": "TurnedOff",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "아맞다",
+    "scheme": "TurnedOff",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
