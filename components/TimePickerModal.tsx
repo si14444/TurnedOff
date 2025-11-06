@@ -3,19 +3,24 @@
  * Using @react-native-community/datetimepicker
  */
 
-import React, { useState } from 'react';
+import DateTimePicker from "@react-native-community/datetimepicker";
+import React, { useState } from "react";
 import {
-  View,
-  Text,
   Modal,
+  Platform,
   Pressable,
   StyleSheet,
-  Platform,
-} from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+  Text,
+  View,
+} from "react-native";
 
-import { Colors, Typography, Spacing, Border, Shadow } from '@/constants/DesignSystem';
-import { useColorScheme } from '@/components/useColorScheme';
+import {
+  Border,
+  Colors,
+  Shadow,
+  Spacing,
+  Typography,
+} from "@/constants/DesignSystem";
 
 interface TimePickerModalProps {
   visible: boolean;
@@ -30,30 +35,29 @@ export default function TimePickerModal({
   onConfirm,
   onCancel,
 }: TimePickerModalProps) {
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
+  const theme = Colors.light;
 
   // Parse initial time to Date object
-  const [hours, minutes] = initialTime.split(':').map(Number);
+  const [hours, minutes] = initialTime.split(":").map(Number);
   const initialDate = new Date();
   initialDate.setHours(hours, minutes, 0, 0);
 
   const [selectedDate, setSelectedDate] = useState(initialDate);
-  const [showPicker, setShowPicker] = useState(Platform.OS === 'ios');
+  const [showPicker, setShowPicker] = useState(Platform.OS === "ios");
 
   const formatTime = (date: Date): string => {
     const hour = date.getHours();
     const minute = date.getMinutes();
-    const period = hour >= 12 ? '오후' : '오전';
+    const period = hour >= 12 ? "오후" : "오전";
     const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-    return `${period} ${displayHour}시 ${minute.toString().padStart(2, '0')}분`;
+    return `${period} ${displayHour}시 ${minute.toString().padStart(2, "0")}분`;
   };
 
   const handleTimeChange = (event: any, date?: Date) => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       setShowPicker(false);
 
-      if (event.type === 'set' && date) {
+      if (event.type === "set" && date) {
         setSelectedDate(date);
         handleConfirm(date);
       } else {
@@ -68,8 +72,8 @@ export default function TimePickerModal({
 
   const handleConfirm = (date?: Date) => {
     const finalDate = date || selectedDate;
-    const hours = finalDate.getHours().toString().padStart(2, '0');
-    const minutes = finalDate.getMinutes().toString().padStart(2, '0');
+    const hours = finalDate.getHours().toString().padStart(2, "0");
+    const minutes = finalDate.getMinutes().toString().padStart(2, "0");
     const formattedTime = `${hours}:${minutes}`;
     onConfirm(formattedTime);
   };
@@ -80,7 +84,7 @@ export default function TimePickerModal({
   };
 
   // Android shows native dialog, no need for modal wrapper
-  if (Platform.OS === 'android') {
+  if (Platform.OS === "android") {
     return (
       <>
         {visible && showPicker && (
@@ -171,14 +175,14 @@ const styles = (theme: typeof Colors.light) =>
   StyleSheet.create({
     overlay: {
       flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      justifyContent: 'flex-end',
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      justifyContent: "flex-end",
     },
     modalContent: {
       backgroundColor: theme.surface,
       borderTopLeftRadius: Border.radius.xl,
       borderTopRightRadius: Border.radius.xl,
-      overflow: 'hidden',
+      overflow: "hidden",
       ...Shadow.xl,
     },
     header: {
@@ -199,7 +203,7 @@ const styles = (theme: typeof Colors.light) =>
       lineHeight: 20,
     },
     timeDisplay: {
-      alignItems: 'center',
+      alignItems: "center",
       paddingVertical: Spacing.xl,
       backgroundColor: theme.surfaceContainer,
     },
@@ -210,14 +214,14 @@ const styles = (theme: typeof Colors.light) =>
     },
     pickerContainer: {
       paddingVertical: Spacing.md,
-      alignItems: 'center',
+      alignItems: "center",
     },
     picker: {
-      width: '100%',
+      width: "100%",
       height: 200,
     },
     actions: {
-      flexDirection: 'row',
+      flexDirection: "row",
       gap: Spacing.md,
       padding: Spacing.lg,
       borderTopWidth: 1,
@@ -227,7 +231,7 @@ const styles = (theme: typeof Colors.light) =>
       flex: 1,
       paddingVertical: Spacing.lg,
       borderRadius: Border.radius.lg,
-      alignItems: 'center',
+      alignItems: "center",
     },
     cancelButton: {
       backgroundColor: theme.surfaceContainer,

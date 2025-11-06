@@ -9,6 +9,7 @@ import * as Notifications from "expo-notifications";
 import React, { useState } from "react";
 import {
   Alert,
+  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -16,26 +17,25 @@ import {
   Switch,
   Text,
   View,
-  Linking,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import TimePickerModal from "@/components/TimePickerModal";
 import { useColorScheme } from "@/components/useColorScheme";
 import { Border, Colors, Spacing, Typography } from "@/constants/DesignSystem";
+import { registerDailyResetTask } from "@/services/backgroundTasks";
+import { setupNotifications } from "@/services/notifications";
 import {
   getSettings,
   updateDailyTime,
   updateNotificationSettings,
 } from "@/services/storage";
-import { setupNotifications } from "@/services/notifications";
-import { registerDailyResetTask } from "@/services/backgroundTasks";
 import { AppSettings } from "@/types";
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
-  const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
+  const theme = Colors.light;
 
   const [settings, setSettings] = useState<AppSettings>({
     dailyTime: "04:00",
@@ -94,7 +94,8 @@ export default function SettingsScreen() {
   const handleNotificationToggle = async (value: boolean) => {
     if (value) {
       // 알림을 켜려고 할 때 권한 요청
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
 
       if (existingStatus !== "granted") {
@@ -237,7 +238,7 @@ const styles = (theme: typeof Colors.light) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.background,
+      backgroundColor: "#F8FAFC",
     },
     loadingContainer: {
       flex: 1,
