@@ -11,6 +11,7 @@ import { AdUnitIds } from '@/config/admob';
 let appOpenAd: AppOpenAd | null = null;
 let isAdLoading = false;
 let isAdShowing = false;
+let hasShownAdThisSession = false;
 
 // Load the ad
 const loadAd = () => {
@@ -46,8 +47,8 @@ const loadAd = () => {
     console.log('App open ad closed');
     isAdShowing = false;
     appOpenAd = null;
-    // Load next ad
-    loadAd();
+    // Don't auto-load next ad immediately
+    // Will load on next app foreground
   });
 
   appOpenAd.load();
@@ -55,8 +56,15 @@ const loadAd = () => {
 
 // Show the ad
 const showAd = () => {
+  // Only show once per session
+  if (hasShownAdThisSession) {
+    console.log('App open ad already shown this session');
+    return;
+  }
+
   if (appOpenAd && !isAdShowing) {
     appOpenAd.show();
+    hasShownAdThisSession = true;
   } else if (!isAdLoading) {
     loadAd();
   }
@@ -68,25 +76,49 @@ const showAd = () => {
  */
 export const useAppOpenAd = () => {
   const appState = useRef(AppState.currentState);
+  const isInitialLaunch = useRef(true);
 
   useEffect(() => {
-    // Load ad on mount
-    loadAd();
+    let initialTimer: ReturnType<typeof setTimeout>;
+    let showTimer: ReturnType<typeof setTimeout>;
 
-    // Handle app state changes
+    // Small delay to ensure AdMob is initialized before first load
+    initialTimer = setTimeout(() => {
+      if (isInitialLaunch.current && !hasShownAdThisSession) {
+        isInitialLaunch.current = false;
+        // Load and show ad on initial launch
+        loadAd();
+        // Wait a bit for ad to load before showing
+        showTimer = setTimeout(() => {
+          showAd();
+        }, 1500);
+      }
+    }, 500);
+
+    // Handle app state changes - only for background/foreground, not initial launch
     const subscription = AppState.addEventListener('change', (nextAppState: AppStateStatus) => {
       if (
         appState.current.match(/inactive|background/) &&
-        nextAppState === 'active'
+        nextAppState === 'active' &&
+        !hasShownAdThisSession
       ) {
-        // App has come to foreground
-        showAd();
+        // App has come to foreground - only show if not shown yet
+        if (!appOpenAd && !isAdLoading) {
+          loadAd();
+          setTimeout(() => {
+            showAd();
+          }, 1000);
+        } else {
+          showAd();
+        }
       }
 
       appState.current = nextAppState;
     });
 
     return () => {
+      if (initialTimer) clearTimeout(initialTimer);
+      if (showTimer) clearTimeout(showTimer);
       subscription.remove();
     };
   }, []);
