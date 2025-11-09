@@ -144,32 +144,41 @@ export default function ManageScreen() {
         {/* Item Content */}
         <View style={styles(theme).itemContent}>
           <Text style={styles(theme).itemName}>{item.name}</Text>
-          <View style={styles(theme).itemMetaRow}>
-            <Text style={styles(theme).itemMeta}>항목 {index + 1}</Text>
-            {/* Photo Requirement Badge */}
-            <Pressable
-              style={[
-                styles(theme).photoRequirementBadge,
-                item.requiresPhoto && styles(theme).photoRequirementBadgeActive,
-              ]}
-              onPress={() => handleTogglePhotoRequirement(item)}
-            >
-              <Ionicons
-                name={item.requiresPhoto ? "camera" : "checkmark-circle"}
-                size={12}
-                color={item.requiresPhoto ? "#FFFFFF" : "#64748B"}
-              />
-              <Text
-                style={[
-                  styles(theme).photoRequirementText,
-                  item.requiresPhoto && styles(theme).photoRequirementTextActive,
-                ]}
-              >
-                {item.requiresPhoto ? "사진" : "체크"}
-              </Text>
-            </Pressable>
-          </View>
+          <Text style={styles(theme).itemMeta}>항목 {index + 1}</Text>
         </View>
+
+        {/* Photo Requirement Toggle - Improved UX */}
+        <Pressable
+          style={[
+            styles(theme).toggleSwitch,
+            item.requiresPhoto && styles(theme).toggleSwitchActive,
+          ]}
+          onPress={() => handleTogglePhotoRequirement(item)}
+        >
+          <View style={styles(theme).toggleOption}>
+            <Ionicons
+              name="camera"
+              size={16}
+              color={item.requiresPhoto ? "#FFFFFF" : "#94A3B8"}
+            />
+          </View>
+          <View style={styles(theme).toggleDivider} />
+          <View style={styles(theme).toggleOption}>
+            <Ionicons
+              name="checkmark-circle"
+              size={16}
+              color={!item.requiresPhoto ? "#FFFFFF" : "#94A3B8"}
+            />
+          </View>
+          <View
+            style={[
+              styles(theme).toggleIndicator,
+              item.requiresPhoto
+                ? styles(theme).toggleIndicatorLeft
+                : styles(theme).toggleIndicatorRight,
+            ]}
+          />
+        </Pressable>
 
         {/* Delete Button */}
         <Pressable
@@ -371,37 +380,50 @@ const styles = (theme: typeof Colors.light) =>
       color: "#000000",
       fontWeight: "600",
     },
-    itemMetaRow: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: Spacing.sm,
-    },
     itemMeta: {
       fontSize: 13,
       color: "#999999",
     },
-    photoRequirementBadge: {
+    toggleSwitch: {
+      position: "relative",
       flexDirection: "row",
       alignItems: "center",
-      gap: 4,
-      paddingHorizontal: 8,
-      paddingVertical: 3,
-      borderRadius: 12,
+      width: 72,
+      height: 36,
       backgroundColor: "#F1F5F9",
-      borderWidth: 1,
-      borderColor: "#E2E8F0",
+      borderRadius: 18,
+      marginRight: Spacing.sm,
+      overflow: "hidden",
     },
-    photoRequirementBadgeActive: {
+    toggleSwitchActive: {
+      backgroundColor: "#E0E7FF",
+    },
+    toggleOption: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 2,
+    },
+    toggleDivider: {
+      width: 1,
+      height: 20,
+      backgroundColor: "#CBD5E1",
+      zIndex: 2,
+    },
+    toggleIndicator: {
+      position: "absolute",
+      width: 36,
+      height: 36,
       backgroundColor: "#2563EB",
-      borderColor: "#2563EB",
+      borderRadius: 18,
+      zIndex: 1,
+      ...Shadow.md,
     },
-    photoRequirementText: {
-      fontSize: 11,
-      fontWeight: "600",
-      color: "#64748B",
+    toggleIndicatorLeft: {
+      left: 0,
     },
-    photoRequirementTextActive: {
-      color: "#FFFFFF",
+    toggleIndicatorRight: {
+      right: 0,
     },
     deleteButton: {
       padding: Spacing.md,
