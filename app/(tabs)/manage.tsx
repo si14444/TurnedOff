@@ -246,52 +246,6 @@ export default function ManageScreen() {
 
       {/* Add New Item Section */}
       <View style={styles(theme).addSection}>
-        {/* Photo Requirement Toggle */}
-        <View style={styles(theme).toggleContainer}>
-          <Pressable
-            style={[
-              styles(theme).toggleButton,
-              requiresPhoto && styles(theme).toggleButtonActive,
-            ]}
-            onPress={() => setRequiresPhoto(true)}
-          >
-            <Ionicons
-              name="camera"
-              size={18}
-              color={requiresPhoto ? "#FFFFFF" : "#64748B"}
-            />
-            <Text
-              style={[
-                styles(theme).toggleText,
-                requiresPhoto && styles(theme).toggleTextActive,
-              ]}
-            >
-              사진으로 체크
-            </Text>
-          </Pressable>
-          <Pressable
-            style={[
-              styles(theme).toggleButton,
-              !requiresPhoto && styles(theme).toggleButtonActive,
-            ]}
-            onPress={() => setRequiresPhoto(false)}
-          >
-            <Ionicons
-              name="checkmark-circle"
-              size={18}
-              color={!requiresPhoto ? "#FFFFFF" : "#64748B"}
-            />
-            <Text
-              style={[
-                styles(theme).toggleText,
-                !requiresPhoto && styles(theme).toggleTextActive,
-              ]}
-            >
-              그냥 체크
-            </Text>
-          </Pressable>
-        </View>
-
         <View style={styles(theme).addInputContainer}>
           <TextInput
             style={styles(theme).input}
