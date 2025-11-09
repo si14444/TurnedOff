@@ -6,11 +6,11 @@
 import { StyleSheet } from 'react-native';
 import { Colors, Typography, Spacing, Border, Shadow } from './DesignSystem';
 
-// Helper to get colors based on theme (light/dark)
-// In actual usage, you'd use a theme context to determine this
-const getColors = (isDark: boolean = false) => isDark ? Colors.dark : Colors.light;
+// Helper to get colors based on theme
+// Currently app only uses light mode
+const getColors = (isDark: boolean = false) => Colors.light;
 
-// For now, using light mode as default
+// Using light mode as default (dark mode not implemented yet)
 const theme = Colors.light;
 
 // ============================================================================

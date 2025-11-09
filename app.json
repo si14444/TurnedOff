@@ -28,8 +28,13 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
         "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.WAKE_LOCK",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
         "android.permission.WAKE_LOCK"
-      ]
+      ],
+      "package": "com.si14444.TurnedOff"
     },
     "web": {
       "bundler": "metro",
@@ -49,6 +54,13 @@
         {
           "icon": "./assets/images/icon.png",
           "color": "#ffffff"
+        }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-3940256099942544~3347511713",
+          "iosAppId": "ca-app-pub-4535163023491412~7650746573"
         }
       ],
       "expo-background-fetch",

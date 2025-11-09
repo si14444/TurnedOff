@@ -13,7 +13,8 @@ import { useColorScheme } from '@/components/useColorScheme';
 
 export default function PhotoViewScreen() {
   const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
+  // Force light mode to match app design
+  const theme = Colors.light;
 
   const params = useLocalSearchParams<{
     itemId: string;

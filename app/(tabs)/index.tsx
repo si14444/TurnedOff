@@ -21,6 +21,7 @@ import { Border, Colors, Shadow, Spacing } from "@/constants/DesignSystem";
 import { checkAndResetIfNeeded, getChecklistItems } from "@/services/storage";
 import { ChecklistItem } from "@/types";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import NativeAdComponent from "@/components/ads/NativeAd";
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
@@ -278,26 +279,9 @@ export default function HomeScreen() {
         </View>
       )}
 
-      {/* Native Ad Placeholder */}
+      {/* Native Ad */}
       <View style={styles(theme).nativeAdContainer}>
-        <View style={styles(theme).adBadge}>
-          <Text style={styles(theme).adBadgeText}>AD</Text>
-        </View>
-        <View style={styles(theme).adContent}>
-          <View style={styles(theme).adIconPlaceholder}>
-            <Ionicons
-              name="cube-outline"
-              size={32}
-              color={theme.onSurfaceVariant}
-            />
-          </View>
-          <View style={styles(theme).adTextContainer}>
-            <Text style={styles(theme).adTitle}>광고 영역</Text>
-            <Text style={styles(theme).adDescription}>
-              네이티브 광고가 표시됩니다
-            </Text>
-          </View>
-        </View>
+        <NativeAdComponent />
       </View>
 
       {/* Quick Actions */}
@@ -461,54 +445,6 @@ const styles = (theme: typeof Colors.light) =>
     nativeAdContainer: {
       marginHorizontal: Spacing.xl,
       marginTop: Spacing.xl,
-      backgroundColor: "#F8FAFC",
-      borderRadius: 20,
-      borderWidth: 0,
-      overflow: "hidden",
-      position: "relative",
-      ...Shadow.md,
-    },
-    adBadge: {
-      position: "absolute",
-      top: Spacing.sm,
-      right: Spacing.sm,
-      backgroundColor: theme.onSurfaceVariant,
-      paddingHorizontal: Spacing.sm,
-      paddingVertical: 2,
-      borderRadius: Border.radius.sm,
-      zIndex: 1,
-    },
-    adBadgeText: {
-      fontSize: 10,
-      color: "#FFFFFF",
-      fontWeight: "700",
-    },
-    adContent: {
-      flexDirection: "row",
-      padding: Spacing.lg,
-      alignItems: "center",
-      gap: Spacing.md,
-    },
-    adIconPlaceholder: {
-      width: 60,
-      height: 60,
-      borderRadius: Border.radius.lg,
-      backgroundColor: theme.surfaceContainer,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    adTextContainer: {
-      flex: 1,
-      gap: Spacing.xs,
-    },
-    adTitle: {
-      fontSize: 16,
-      color: "#333333",
-      fontWeight: "500",
-    },
-    adDescription: {
-      fontSize: 14,
-      color: "#666666",
     },
     // Quick Actions
     quickActionsSection: {

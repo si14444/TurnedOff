@@ -5,11 +5,13 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import mobileAds from 'react-native-google-mobile-ads';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { checkAndResetIfNeeded } from '@/services/storage';
 import { setupNotifications } from '@/services/notifications';
 import { registerDailyResetTask } from '@/services/backgroundTasks';
+import { useAppOpenAd } from '@/components/ads/AppOpenAd';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -45,6 +47,10 @@ export default function RootLayout() {
   useEffect(() => {
     const initializeApp = async () => {
       try {
+        // Initialize Google Mobile Ads
+        await mobileAds().initialize();
+        console.log('AdMob initialized');
+
         // Check and perform daily reset if needed
         await checkAndResetIfNeeded();
 
@@ -70,6 +76,9 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+
+  // Initialize App Open Ad
+  useAppOpenAd();
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
