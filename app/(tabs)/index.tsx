@@ -16,12 +16,12 @@ import {
   View,
 } from "react-native";
 
+import NativeAdComponent from "@/components/ads/NativeAd";
 import { useColorScheme } from "@/components/useColorScheme";
 import { Border, Colors, Shadow, Spacing } from "@/constants/DesignSystem";
 import { checkAndResetIfNeeded, getChecklistItems } from "@/services/storage";
 import { ChecklistItem } from "@/types";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import NativeAdComponent from "@/components/ads/NativeAd";
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
@@ -194,7 +194,11 @@ export default function HomeScreen() {
           ) : (
             <View style={styles(theme).cameraHint}>
               <Ionicons
-                name={item.requiresPhoto ? "camera-outline" : "checkmark-circle-outline"}
+                name={
+                  item.requiresPhoto
+                    ? "camera-outline"
+                    : "checkmark-circle-outline"
+                }
                 size={20}
                 color={theme.onSurfaceVariant}
               />
@@ -247,7 +251,9 @@ export default function HomeScreen() {
       <View
         style={[
           styles(theme).welcomeSection,
-          { paddingTop: insets.top + Spacing.xl },
+          {
+            paddingTop: insets.top + Spacing.xl,
+          },
         ]}
       >
         <Text style={styles(theme).dateText}>{currentDate}</Text>
@@ -357,7 +363,7 @@ const styles = (theme: typeof Colors.light) =>
     },
     listContent: {
       paddingHorizontal: 0,
-      paddingBottom: Spacing.xl,
+      paddingBottom: Spacing["8xl"],
       backgroundColor: "#F8FAFC",
     },
     // Welcome Section

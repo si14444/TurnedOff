@@ -421,7 +421,6 @@ const styles = (theme: typeof Colors.light) =>
     addSection: {
       padding: Spacing.lg,
       paddingBottom: Spacing.xl,
-      marginBottom: 60, // Space for banner ad
       backgroundColor: "#FFFFFF",
       borderTopWidth: 1,
       borderTopColor: "#E2E8F0",
