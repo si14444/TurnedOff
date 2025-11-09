@@ -84,21 +84,35 @@ export default function HomeScreen() {
     setRefreshing(false);
   };
 
-  const handleItemPress = (item: ChecklistItem) => {
+  const handleItemPress = async (item: ChecklistItem) => {
     if (item.isChecked) {
-      router.push({
-        pathname: "/photo-view",
-        params: {
-          itemId: item.id,
-          itemName: item.name,
-          photoUri: item.photoUri,
-        },
-      });
+      // View photo if checked
+      if (item.photoUri) {
+        router.push({
+          pathname: "/photo-view",
+          params: {
+            itemId: item.id,
+            itemName: item.name,
+            photoUri: item.photoUri,
+          },
+        });
+      }
     } else {
-      router.push({
-        pathname: "/camera",
-        params: { itemId: item.id, itemName: item.name },
-      });
+      // Check if photo is required
+      if (item.requiresPhoto) {
+        // Go to camera
+        router.push({
+          pathname: "/camera",
+          params: { itemId: item.id, itemName: item.name },
+        });
+      } else {
+        // Just check without photo
+        const { checkItem } = await import("@/services/storage");
+        const success = await checkItem(item.id, null);
+        if (success) {
+          await loadItems();
+        }
+      }
     }
   };
 
@@ -167,16 +181,20 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Right side: Photo indicator or Camera icon */}
+        {/* Right side: Photo indicator or Camera/Check icon */}
         <View style={styles(theme).itemRight}>
           {item.isChecked ? (
             <View style={styles(theme).photoIndicator}>
-              <Ionicons name="image" size={20} color={theme.primary} />
+              <Ionicons
+                name={item.photoUri ? "image" : "checkmark-circle"}
+                size={20}
+                color={theme.primary}
+              />
             </View>
           ) : (
             <View style={styles(theme).cameraHint}>
               <Ionicons
-                name="camera-outline"
+                name={item.requiresPhoto ? "camera-outline" : "checkmark-circle-outline"}
                 size={20}
                 color={theme.onSurfaceVariant}
               />

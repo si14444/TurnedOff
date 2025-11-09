@@ -9,6 +9,7 @@ export interface ChecklistItem {
   isChecked: boolean;
   checkedAt: string | null; // ISO timestamp
   photoUri: string | null;
+  requiresPhoto: boolean; // Whether this item requires photo verification
   createdAt: string; // ISO timestamp
 }
 

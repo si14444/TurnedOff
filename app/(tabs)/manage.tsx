@@ -24,6 +24,7 @@ import {
   createChecklistItem,
   deleteChecklistItem,
   getChecklistItems,
+  updateItemPhotoRequirement,
 } from "@/services/storage";
 import { ChecklistItem } from "@/types";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -35,6 +36,7 @@ export default function ManageScreen() {
 
   const [items, setItems] = useState<ChecklistItem[]>([]);
   const [newItemName, setNewItemName] = useState("");
+  const [requiresPhoto, setRequiresPhoto] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
 
   const loadItems = async () => {
@@ -63,11 +65,12 @@ export default function ManageScreen() {
 
     setIsAdding(true);
     try {
-      const newItem = await createChecklistItem(trimmedName);
+      const newItem = await createChecklistItem(trimmedName, requiresPhoto);
 
       if (newItem) {
         setItems([...items, newItem]);
         setNewItemName("");
+        setRequiresPhoto(true); // Reset to default
       } else {
         Alert.alert("오류", "항목 추가 중 문제가 발생했습니다.");
       }
@@ -110,6 +113,16 @@ export default function ManageScreen() {
     );
   };
 
+  const handleTogglePhotoRequirement = async (item: ChecklistItem) => {
+    const newRequiresPhoto = !item.requiresPhoto;
+    const success = await updateItemPhotoRequirement(item.id, newRequiresPhoto);
+    if (success) {
+      await loadItems();
+    } else {
+      Alert.alert("오류", "설정 변경 중 문제가 발생했습니다.");
+    }
+  };
+
   const renderItem = ({
     item,
     index,
@@ -131,7 +144,31 @@ export default function ManageScreen() {
         {/* Item Content */}
         <View style={styles(theme).itemContent}>
           <Text style={styles(theme).itemName}>{item.name}</Text>
-          <Text style={styles(theme).itemMeta}>항목 {index + 1}</Text>
+          <View style={styles(theme).itemMetaRow}>
+            <Text style={styles(theme).itemMeta}>항목 {index + 1}</Text>
+            {/* Photo Requirement Badge */}
+            <Pressable
+              style={[
+                styles(theme).photoRequirementBadge,
+                item.requiresPhoto && styles(theme).photoRequirementBadgeActive,
+              ]}
+              onPress={() => handleTogglePhotoRequirement(item)}
+            >
+              <Ionicons
+                name={item.requiresPhoto ? "camera" : "checkmark-circle"}
+                size={12}
+                color={item.requiresPhoto ? "#FFFFFF" : "#64748B"}
+              />
+              <Text
+                style={[
+                  styles(theme).photoRequirementText,
+                  item.requiresPhoto && styles(theme).photoRequirementTextActive,
+                ]}
+              >
+                {item.requiresPhoto ? "사진" : "체크"}
+              </Text>
+            </Pressable>
+          </View>
         </View>
 
         {/* Delete Button */}
@@ -195,10 +232,57 @@ export default function ManageScreen() {
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={renderEmpty}
         showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior="automatic"
       />
 
       {/* Add New Item Section */}
       <View style={styles(theme).addSection}>
+        {/* Photo Requirement Toggle */}
+        <View style={styles(theme).toggleContainer}>
+          <Pressable
+            style={[
+              styles(theme).toggleButton,
+              requiresPhoto && styles(theme).toggleButtonActive,
+            ]}
+            onPress={() => setRequiresPhoto(true)}
+          >
+            <Ionicons
+              name="camera"
+              size={18}
+              color={requiresPhoto ? "#FFFFFF" : "#64748B"}
+            />
+            <Text
+              style={[
+                styles(theme).toggleText,
+                requiresPhoto && styles(theme).toggleTextActive,
+              ]}
+            >
+              사진으로 체크
+            </Text>
+          </Pressable>
+          <Pressable
+            style={[
+              styles(theme).toggleButton,
+              !requiresPhoto && styles(theme).toggleButtonActive,
+            ]}
+            onPress={() => setRequiresPhoto(false)}
+          >
+            <Ionicons
+              name="checkmark-circle"
+              size={18}
+              color={!requiresPhoto ? "#FFFFFF" : "#64748B"}
+            />
+            <Text
+              style={[
+                styles(theme).toggleText,
+                !requiresPhoto && styles(theme).toggleTextActive,
+              ]}
+            >
+              그냥 체크
+            </Text>
+          </Pressable>
+        </View>
+
         <View style={styles(theme).addInputContainer}>
           <TextInput
             style={styles(theme).input}
@@ -242,7 +326,7 @@ const styles = (theme: typeof Colors.light) =>
     listContent: {
       paddingHorizontal: 0,
       paddingTop: Spacing.lg,
-      paddingBottom: Spacing.xl,
+      paddingBottom: 200, // Extra padding to avoid banner ad
     },
     listEmpty: {
       flexGrow: 1,
@@ -287,9 +371,37 @@ const styles = (theme: typeof Colors.light) =>
       color: "#000000",
       fontWeight: "600",
     },
+    itemMetaRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: Spacing.sm,
+    },
     itemMeta: {
       fontSize: 13,
       color: "#999999",
+    },
+    photoRequirementBadge: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
+      paddingHorizontal: 8,
+      paddingVertical: 3,
+      borderRadius: 12,
+      backgroundColor: "#F1F5F9",
+      borderWidth: 1,
+      borderColor: "#E2E8F0",
+    },
+    photoRequirementBadgeActive: {
+      backgroundColor: "#2563EB",
+      borderColor: "#2563EB",
+    },
+    photoRequirementText: {
+      fontSize: 11,
+      fontWeight: "600",
+      color: "#64748B",
+    },
+    photoRequirementTextActive: {
+      color: "#FFFFFF",
     },
     deleteButton: {
       padding: Spacing.md,
@@ -333,10 +445,41 @@ const styles = (theme: typeof Colors.light) =>
     addSection: {
       padding: Spacing.lg,
       paddingBottom: Spacing.xl,
+      marginBottom: 60, // Space for banner ad
       backgroundColor: "#FFFFFF",
       borderTopWidth: 1,
       borderTopColor: "#E2E8F0",
       ...Shadow.lg,
+    },
+    toggleContainer: {
+      flexDirection: "row",
+      gap: Spacing.sm,
+      marginBottom: Spacing.md,
+    },
+    toggleButton: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: Spacing.xs,
+      paddingVertical: Spacing.sm,
+      paddingHorizontal: Spacing.md,
+      borderRadius: 10,
+      backgroundColor: "#F1F5F9",
+      borderWidth: 2,
+      borderColor: "#E2E8F0",
+    },
+    toggleButtonActive: {
+      backgroundColor: "#2563EB",
+      borderColor: "#2563EB",
+    },
+    toggleText: {
+      fontSize: 14,
+      fontWeight: "600",
+      color: "#64748B",
+    },
+    toggleTextActive: {
+      color: "#FFFFFF",
     },
     addInputContainer: {
       flexDirection: "row",

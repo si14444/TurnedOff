@@ -44,7 +44,7 @@ export const saveChecklistItems = async (items: ChecklistItem[]): Promise<boolea
   }
 };
 
-export const createChecklistItem = async (name: string): Promise<ChecklistItem | null> => {
+export const createChecklistItem = async (name: string, requiresPhoto: boolean = true): Promise<ChecklistItem | null> => {
   try {
     const items = await getChecklistItems();
 
@@ -55,6 +55,7 @@ export const createChecklistItem = async (name: string): Promise<ChecklistItem |
       isChecked: false,
       checkedAt: null,
       photoUri: null,
+      requiresPhoto,
       createdAt: new Date().toISOString(),
     };
 
@@ -100,7 +101,27 @@ export const updateChecklistItemOrder = async (items: ChecklistItem[]): Promise<
   }
 };
 
-export const checkItem = async (itemId: string, photoUri: string): Promise<boolean> => {
+export const updateItemPhotoRequirement = async (itemId: string, requiresPhoto: boolean): Promise<boolean> => {
+  try {
+    const items = await getChecklistItems();
+    const updatedItems = items.map(item => {
+      if (item.id === itemId) {
+        return {
+          ...item,
+          requiresPhoto,
+        };
+      }
+      return item;
+    });
+
+    return await saveChecklistItems(updatedItems);
+  } catch (error) {
+    console.error('Error updating item photo requirement:', error);
+    return false;
+  }
+};
+
+export const checkItem = async (itemId: string, photoUri: string | null = null): Promise<boolean> => {
   try {
     const items = await getChecklistItems();
     const updatedItems = items.map(item => {

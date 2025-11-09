@@ -3,86 +3,166 @@
  * Google AdMob native ad with custom styling
  */
 
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { NativeAd, NativeAdView, NativeMediaView } from 'react-native-google-mobile-ads';
 import { AdUnitIds } from '@/config/admob';
-import { Colors, Spacing, Border, Shadow } from '@/constants/DesignSystem';
-import { useColorScheme } from '@/components/useColorScheme';
-import { Ionicons } from '@expo/vector-icons';
+import { Spacing, Border, Shadow } from '@/constants/DesignSystem';
 
 interface NativeAdComponentProps {
   style?: any;
 }
 
 export default function NativeAdComponent({ style }: NativeAdComponentProps) {
-  const colorScheme = useColorScheme();
-  const theme = Colors.light; // Force light mode to match app
+  const [nativeAd, setNativeAd] = useState<NativeAd | null>(null);
   const [isAdLoaded, setIsAdLoaded] = useState(false);
 
-  if (!AdUnitIds.native) {
-    console.warn('Native ad unit ID not configured');
+  useEffect(() => {
+    const adUnitId = AdUnitIds.native;
+
+    if (!adUnitId) {
+      console.warn('Native ad unit ID not configured');
+      return;
+    }
+
+    // Load native ad
+    const loadNativeAd = async () => {
+      try {
+        const ad = await NativeAd.createForAdRequest(adUnitId, {
+          requestNonPersonalizedAdsOnly: false,
+        });
+
+        setNativeAd(ad);
+        console.log('Native ad loaded successfully:', {
+          headline: ad.headline,
+          advertiser: ad.advertiser,
+          body: ad.body,
+          callToAction: ad.callToAction,
+        });
+        setIsAdLoaded(true);
+      } catch (error) {
+        console.log('Native ad failed to load:', error);
+        setIsAdLoaded(false);
+      }
+    };
+
+    loadNativeAd();
+
+    return () => {
+      // Cleanup
+      if (nativeAd) {
+        nativeAd.destroy();
+      }
+    };
+  }, []);
+
+  if (!isAdLoaded || !nativeAd) {
     return null;
   }
 
   return (
-    <View style={[styles.container, style]}>
-      <View style={styles.adView}>
-        {/* Ad Badge */}
-        <View style={styles.adBadgeContainer}>
-          <View style={styles.adBadge}>
-            <Text style={styles.adBadgeText}>AD</Text>
+    <NativeAdView style={[styles.adView, style]} nativeAd={nativeAd}>
+      {/* Ad Attribution - Must be visible and inside NativeAdView */}
+      <View style={styles.adAttribution}>
+        <Text style={styles.adAttributionText}>Ad</Text>
+      </View>
+
+      {/* Ad Content */}
+      <View style={styles.adContent}>
+        {/* Ad Header with Icon and Text */}
+        <View style={styles.adHeader}>
+          {nativeAd.icon?.url && (
+            <Image source={{ uri: nativeAd.icon.url }} style={styles.adIcon} />
+          )}
+          <View style={styles.adHeaderText}>
+            {nativeAd.headline && (
+              <Text style={styles.adHeadline} numberOfLines={1}>
+                {nativeAd.headline}
+              </Text>
+            )}
+            {nativeAd.advertiser && (
+              <Text style={styles.adAdvertiser} numberOfLines={1}>
+                {nativeAd.advertiser}
+              </Text>
+            )}
           </View>
         </View>
 
-        {/* Banner Ad - Using banner format for native ad slot */}
-        <BannerAd
-          unitId={AdUnitIds.native}
-          size={BannerAdSize.MEDIUM_RECTANGLE}
-          requestOptions={{
-            requestNonPersonalizedAdsOnly: false,
-          }}
-          onAdLoaded={() => {
-            console.log('Native ad loaded');
-            setIsAdLoaded(true);
-          }}
-          onAdFailedToLoad={(error) => {
-            console.log('Native ad failed to load:', error);
-            setIsAdLoaded(false);
-          }}
-        />
+        {/* Ad Body */}
+        {nativeAd.body && (
+          <Text style={styles.adBody} numberOfLines={2}>
+            {nativeAd.body}
+          </Text>
+        )}
+
+        {/* Media View (Image or Video) */}
+        {nativeAd.mediaContent && (
+          <NativeMediaView style={styles.adMedia} />
+        )}
       </View>
-    </View>
+    </NativeAdView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    overflow: 'hidden',
-  },
   adView: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: 20,
-    padding: Spacing.lg,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: Spacing.md,
     ...Shadow.md,
+    overflow: 'visible',
   },
-  adBadgeContainer: {
-    position: 'absolute',
-    top: Spacing.sm,
-    right: Spacing.sm,
-    zIndex: 10,
+  adAttribution: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 4,
+    marginBottom: Spacing.sm,
   },
-  adBadge: {
-    backgroundColor: '#64748B',
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-    borderRadius: Border.radius.sm,
+  adAttributionText: {
+    fontSize: 12,
+    color: '#6B7280',
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
-  adBadgeText: {
-    fontSize: 10,
-    color: '#FFFFFF',
+  adContent: {
+    gap: Spacing.sm,
+  },
+  adHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  adIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+  },
+  adHeaderText: {
+    flex: 1,
+  },
+  adHeadline: {
+    fontSize: 14,
     fontWeight: '700',
+    color: '#1E293B',
+    marginBottom: 1,
+  },
+  adAdvertiser: {
+    fontSize: 11,
+    color: '#64748B',
+  },
+  adBody: {
+    fontSize: 13,
+    color: '#334155',
+    lineHeight: 18,
+  },
+  adMedia: {
+    width: '100%',
+    height: 140,
+    borderRadius: 10,
+    backgroundColor: '#F1F5F9',
   },
 });
