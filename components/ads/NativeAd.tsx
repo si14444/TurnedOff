@@ -67,7 +67,7 @@ export function NativeAdComponent() {
 
   return (
     <LinearGradient
-      colors={["#B8E6D5", "#FFFFFF", "#F9FAFB"]}
+      colors={["#FFFFFF", "#F2F2F2", "#E5E5E5"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}
@@ -80,7 +80,7 @@ export function NativeAdComponent() {
           {/* Ad Attribution Badge - 오버레이 */}
           <View style={styles.adBadgeContainer}>
             <LinearGradient
-              colors={["rgba(16, 185, 129, 0.95)", "rgba(16, 185, 129, 0.85)"]}
+              colors={["rgba(120, 120, 120, 0.95)", "rgba(60, 60, 60, 0.9)"]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.adBadge}
@@ -194,12 +194,10 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 18,
     marginBottom: 1,
-    color: "#1F2937",
   },
   body: {
     fontSize: 11,
     lineHeight: 15,
-    color: "#4B5563",
     marginBottom: 1,
   },
   advertiserRow: {
@@ -225,6 +223,5 @@ const styles = StyleSheet.create({
   advertiser: {
     fontSize: 10,
     fontWeight: "600",
-    color: "#6B7280",
   },
 });
