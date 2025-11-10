@@ -16,7 +16,7 @@ import {
   View,
 } from "react-native";
 
-import NativeAdComponent from "@/components/ads/NativeAd";
+import { NativeAdComponent } from "@/components/ads/NativeAd";
 import { useColorScheme } from "@/components/useColorScheme";
 import { Border, Colors, Shadow, Spacing } from "@/constants/DesignSystem";
 import { checkAndResetIfNeeded, getChecklistItems } from "@/services/storage";

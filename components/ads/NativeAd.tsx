@@ -1,169 +1,230 @@
-/**
- * Native Ad Component
- * Google AdMob native ad with custom styling
- */
+import { LinearGradient } from "expo-linear-gradient";
+import React, { useEffect, useState } from "react";
+import { Platform, StyleSheet, Text, View } from "react-native";
 
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { NativeAd, NativeAdView, NativeMediaView } from 'react-native-google-mobile-ads';
-import { AdUnitIds } from '@/config/admob';
-import { Spacing, Border, Shadow } from '@/constants/DesignSystem';
+// Google Mobile Ads Native Ad imports
+import {
+  NativeAd as GoogleNativeAd,
+  NativeAdView,
+  NativeAsset,
+  NativeAssetType,
+  NativeMediaView,
+  TestIds,
+} from "react-native-google-mobile-ads";
 
-interface NativeAdComponentProps {
-  style?: any;
-}
+const adUnitId = __DEV__
+  ? TestIds.NATIVE
+  : Platform.select({
+      ios: process.env.EXPO_PUBLIC_IOS_NATIVE || "",
+      android: "",
+    }) || "";
 
-export default function NativeAdComponent({ style }: NativeAdComponentProps) {
-  const [nativeAd, setNativeAd] = useState<NativeAd | null>(null);
-  const [isAdLoaded, setIsAdLoaded] = useState(false);
+export function NativeAdComponent() {
+  const [nativeAd, setNativeAd] = useState<GoogleNativeAd | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const adUnitId = AdUnitIds.native;
-
     if (!adUnitId) {
-      console.warn('Native ad unit ID not configured');
+      console.warn("[NativeAd] No ad unit ID configured");
       return;
     }
 
-    // Load native ad
-    const loadNativeAd = async () => {
+    let ad: GoogleNativeAd | null = null;
+
+    // Create and load native ad
+    const loadAd = async () => {
       try {
-        const ad = await NativeAd.createForAdRequest(adUnitId, {
-          requestNonPersonalizedAdsOnly: false,
+        ad = await GoogleNativeAd.createForAdRequest(adUnitId, {
+          requestNonPersonalizedAdsOnly: true,
         });
 
+        console.log("[NativeAd] Ad loaded successfully");
+        console.log("[NativeAd] Headline:", ad.headline);
+        console.log("[NativeAd] Body:", ad.body);
+        console.log("[NativeAd] Advertiser:", ad.advertiser);
+        console.log("[NativeAd] CTA:", ad.callToAction);
+
         setNativeAd(ad);
-        console.log('Native ad loaded successfully:', {
-          headline: ad.headline,
-          advertiser: ad.advertiser,
-          body: ad.body,
-          callToAction: ad.callToAction,
-        });
-        setIsAdLoaded(true);
+        setIsLoaded(true);
       } catch (error) {
-        console.log('Native ad failed to load:', error);
-        setIsAdLoaded(false);
+        console.error("[NativeAd] Failed to load:", error);
       }
     };
 
-    loadNativeAd();
+    loadAd();
 
+    // Cleanup
     return () => {
-      // Cleanup
-      if (nativeAd) {
-        nativeAd.destroy();
+      if (ad) {
+        ad.destroy();
       }
     };
   }, []);
 
-  if (!isAdLoaded || !nativeAd) {
+  if (!adUnitId || !isLoaded || !nativeAd) {
     return null;
   }
 
   return (
-    <NativeAdView style={[styles.adView, style]} nativeAd={nativeAd}>
-      {/* Ad Attribution - Must be visible and inside NativeAdView */}
-      <View style={styles.adAttribution}>
-        <Text style={styles.adAttributionText}>Ad</Text>
-      </View>
+    <LinearGradient
+      colors={["#B8E6D5", "#FFFFFF", "#F9FAFB"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}
+    >
+      <NativeAdView nativeAd={nativeAd} style={styles.nativeAd}>
+        {/* Main Media View with rounded corners */}
+        <View style={styles.mediaContainer}>
+          <NativeMediaView style={styles.mediaView} />
 
-      {/* Ad Content */}
-      <View style={styles.adContent}>
-        {/* Ad Header with Icon and Text */}
-        <View style={styles.adHeader}>
-          {nativeAd.icon?.url && (
-            <Image source={{ uri: nativeAd.icon.url }} style={styles.adIcon} />
-          )}
-          <View style={styles.adHeaderText}>
-            {nativeAd.headline && (
-              <Text style={styles.adHeadline} numberOfLines={1}>
-                {nativeAd.headline}
-              </Text>
-            )}
-            {nativeAd.advertiser && (
-              <Text style={styles.adAdvertiser} numberOfLines={1}>
-                {nativeAd.advertiser}
-              </Text>
-            )}
+          {/* Ad Attribution Badge - 오버레이 */}
+          <View style={styles.adBadgeContainer}>
+            <LinearGradient
+              colors={["rgba(16, 185, 129, 0.95)", "rgba(16, 185, 129, 0.85)"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.adBadge}
+            >
+              <Text style={styles.adBadgeText}>AD</Text>
+            </LinearGradient>
           </View>
         </View>
 
-        {/* Ad Body */}
-        {nativeAd.body && (
-          <Text style={styles.adBody} numberOfLines={2}>
-            {nativeAd.body}
-          </Text>
-        )}
+        {/* Ad Content Container */}
+        <View style={styles.contentContainer}>
+          {/* Required: Headline (제목) */}
+          {nativeAd.headline && (
+            <NativeAsset assetType={NativeAssetType.HEADLINE}>
+              <Text style={styles.headline} numberOfLines={2}>
+                {nativeAd.headline}
+              </Text>
+            </NativeAsset>
+          )}
 
-        {/* Media View (Image or Video) */}
-        {nativeAd.mediaContent && (
-          <NativeMediaView style={styles.adMedia} />
-        )}
-      </View>
-    </NativeAdView>
+          {/* Required: Body (설명) */}
+          {nativeAd.body && (
+            <NativeAsset assetType={NativeAssetType.BODY}>
+              <Text style={styles.body} numberOfLines={2}>
+                {nativeAd.body}
+              </Text>
+            </NativeAsset>
+          )}
+
+          {/* Advertiser */}
+          {nativeAd.advertiser && (
+            <View style={styles.advertiserRow}>
+              <View style={styles.advertiserIcon}>
+                <Text style={styles.advertiserIconText}>📢</Text>
+              </View>
+              <View style={styles.advertiserAsset}>
+                <NativeAsset assetType={NativeAssetType.ADVERTISER}>
+                  <Text style={styles.advertiser} numberOfLines={1}>
+                    {nativeAd.advertiser}
+                  </Text>
+                </NativeAsset>
+              </View>
+            </View>
+          )}
+        </View>
+      </NativeAdView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  adView: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: Spacing.md,
-    ...Shadow.md,
-    overflow: 'hidden',
+  container: {
+    width: "100%",
+    minHeight: 190,
+    borderRadius: 12,
+    overflow: "hidden",
+    marginVertical: 6,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  adAttribution: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#F3F4F6',
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
-    marginBottom: Spacing.sm,
+  nativeAd: {
+    width: "100%",
+    minHeight: 190,
   },
-  adAttributionText: {
-    fontSize: 13,
-    color: '#374151',
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
+  mediaContainer: {
+    width: "100%",
+    height: 130,
+    minHeight: 130,
+    position: "relative",
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  adContent: {
-    gap: Spacing.sm,
+  mediaView: {
+    width: "100%",
+    height: 130,
+    minHeight: 130,
+    minWidth: 130,
   },
-  adHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
+  adBadgeContainer: {
+    position: "absolute",
+    top: 6,
+    left: 6,
   },
-  adIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 6,
+  adBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 2,
+    elevation: 1,
   },
-  adHeaderText: {
-    flex: 1,
+  adBadgeText: {
+    fontSize: 8,
+    fontWeight: "700",
+    color: "#FFFFFF",
+    letterSpacing: 0.4,
   },
-  adHeadline: {
+  contentContainer: {
+    padding: 10,
+    backgroundColor: "transparent",
+    gap: 4,
+  },
+  headline: {
     fontSize: 14,
-    fontWeight: '700',
-    color: '#1E293B',
+    fontWeight: "700",
+    lineHeight: 18,
+    marginBottom: 1,
+    color: "#1F2937",
+  },
+  body: {
+    fontSize: 11,
+    lineHeight: 15,
+    color: "#4B5563",
     marginBottom: 1,
   },
-  adAdvertiser: {
-    fontSize: 11,
-    color: '#64748B',
+  advertiserRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    marginTop: 2,
   },
-  adBody: {
-    fontSize: 13,
-    color: '#334155',
-    lineHeight: 18,
+  advertiserIcon: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: "rgba(16, 185, 129, 0.1)",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  adMedia: {
-    width: '100%',
-    height: 140,
-    borderRadius: 10,
-    backgroundColor: '#F1F5F9',
+  advertiserIconText: {
+    fontSize: 9,
+  },
+  advertiserAsset: {
+    flex: 1,
+  },
+  advertiser: {
+    fontSize: 10,
+    fontWeight: "600",
+    color: "#6B7280",
   },
 });
