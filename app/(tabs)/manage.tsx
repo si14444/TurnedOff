@@ -229,7 +229,7 @@ export default function ManageScreen() {
     >
       {/* List */}
       <FlatList
-        style={{ paddingTop: insets.top }}
+        style={{ paddingTop: insets.top + Spacing.xl }}
         data={items}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
@@ -288,8 +288,8 @@ const styles = (theme: typeof Colors.light) =>
     },
     listContent: {
       paddingHorizontal: 0,
-      paddingTop: Spacing.lg,
-      paddingBottom: 200, // Extra padding to avoid banner ad
+      paddingTop: 0,
+      paddingBottom: 200,
     },
     listEmpty: {
       flexGrow: 1,
@@ -420,7 +420,7 @@ const styles = (theme: typeof Colors.light) =>
     },
     addSection: {
       padding: Spacing.lg,
-      paddingBottom: Spacing.xl,
+      paddingBottom: 80, // Increased to avoid banner ad overlap
       backgroundColor: "#FFFFFF",
       borderTopWidth: 1,
       borderTopColor: "#E2E8F0",

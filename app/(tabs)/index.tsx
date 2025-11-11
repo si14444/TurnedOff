@@ -5,7 +5,7 @@
 
 import { Ionicons } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -52,6 +52,9 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [currentDate, setCurrentDate] = useState(getFormattedDate());
   const [greeting, setGreeting] = useState(getGreeting());
+
+  // Memoize ad component to prevent re-rendering
+  const memoizedAd = useMemo(() => <NativeAdComponent />, []);
 
   const loadItems = async () => {
     try {
@@ -245,88 +248,75 @@ export default function HomeScreen() {
   const progressPercentage =
     totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
 
-  const renderHeader = () => (
-    <>
-      {/* Welcome Section */}
-      <View
-        style={[
-          styles(theme).welcomeSection,
-          {
-            paddingTop: insets.top + Spacing.xl,
-          },
-        ]}
-      >
-        <Text style={styles(theme).dateText}>{currentDate}</Text>
-      </View>
+  // Memoize entire header to prevent re-rendering
+  const headerComponent = useMemo(
+    () => (
+      <>
+        {/* Welcome Section */}
+        <View
+          style={[
+            styles(theme).welcomeSection,
+            {
+              paddingTop: insets.top + Spacing.xl,
+            },
+          ]}
+        >
+          <Text style={styles(theme).dateText}>{currentDate}</Text>
+        </View>
 
-      {/* Stats Cards */}
-      {totalCount > 0 && (
-        <View style={styles(theme).statsSection}>
-          {/* Today's Progress Card */}
-          <View style={styles(theme).statCard}>
-            <View style={styles(theme).statCardHeader}>
-              <Ionicons name="checkmark-done" size={20} color={theme.primary} />
-              <Text style={styles(theme).statCardTitle}>오늘의 완료율</Text>
-            </View>
-            <View style={styles(theme).statCardBody}>
-              <Text style={styles(theme).statCardValue}>
-                {Math.round(progressPercentage)}%
-              </Text>
-              <View style={styles(theme).miniProgressBar}>
-                <View
-                  style={[
-                    styles(theme).miniProgressFill,
-                    { width: `${progressPercentage}%` },
-                  ]}
-                />
+        {/* Stats Cards */}
+        {totalCount > 0 && (
+          <View style={styles(theme).statsSection}>
+            {/* Today's Progress Card */}
+            <View style={styles(theme).statCard}>
+              <View style={styles(theme).statCardHeader}>
+                <Ionicons name="checkmark-done" size={20} color={theme.primary} />
+                <Text style={styles(theme).statCardTitle}>오늘의 완료율</Text>
               </View>
-              <Text style={styles(theme).statCardSubtext}>
-                {completedCount}/{totalCount} 완료
-              </Text>
+              <View style={styles(theme).statCardBody}>
+                <Text style={styles(theme).statCardValue}>
+                  {Math.round(progressPercentage)}%
+                </Text>
+                <View style={styles(theme).miniProgressBar}>
+                  <View
+                    style={[
+                      styles(theme).miniProgressFill,
+                      { width: `${progressPercentage}%` },
+                    ]}
+                  />
+                </View>
+                <Text style={styles(theme).statCardSubtext}>
+                  {completedCount}/{totalCount} 완료
+                </Text>
+              </View>
             </View>
           </View>
+        )}
 
-          {/* Quick Stats */}
-          {/* <View style={styles(theme).quickStats}>
-            <View style={styles(theme).quickStatItem}>
-              <Ionicons name="list" size={18} color={theme.onSurfaceVariant} />
-              <Text style={styles(theme).quickStatValue}>{totalCount}</Text>
-              <Text style={styles(theme).quickStatLabel}>전체 항목</Text>
-            </View>
-            <View style={styles(theme).quickStatDivider} />
-            <View style={styles(theme).quickStatItem}>
-              <Ionicons name="flame" size={18} color={theme.primary} />
-              <Text style={styles(theme).quickStatValue}>{completedCount}</Text>
-              <Text style={styles(theme).quickStatLabel}>완료</Text>
-            </View>
-          </View> */}
+        {/* Native Ad */}
+        <View style={styles(theme).nativeAdContainer}>
+          {memoizedAd}
         </View>
-      )}
 
-      {/* Native Ad */}
-      <View style={styles(theme).nativeAdContainer}>
-        <NativeAdComponent />
-      </View>
-
-      {/* Quick Actions */}
-
-      {/* Checklist Title */}
-      {totalCount > 0 && (
-        <View style={styles(theme).checklistHeader}>
-          <Text style={styles(theme).checklistTitle}>오늘의 체크리스트</Text>
-          {completedCount === totalCount && (
-            <View style={styles(theme).completionBadge}>
-              <Ionicons
-                name="checkmark-circle"
-                size={16}
-                color={theme.success}
-              />
-              <Text style={styles(theme).completionBadgeText}>완료</Text>
-            </View>
-          )}
-        </View>
-      )}
-    </>
+        {/* Checklist Title */}
+        {totalCount > 0 && (
+          <View style={styles(theme).checklistHeader}>
+            <Text style={styles(theme).checklistTitle}>오늘의 체크리스트</Text>
+            {completedCount === totalCount && (
+              <View style={styles(theme).completionBadge}>
+                <Ionicons
+                  name="checkmark-circle"
+                  size={16}
+                  color={theme.success}
+                />
+                <Text style={styles(theme).completionBadgeText}>완료</Text>
+              </View>
+            )}
+          </View>
+        )}
+      </>
+    ),
+    [currentDate, totalCount, completedCount, progressPercentage, memoizedAd]
   );
 
   return (
@@ -335,7 +325,7 @@ export default function HomeScreen() {
         data={items}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={renderHeader}
+        ListHeaderComponent={headerComponent}
         contentContainerStyle={
           items.length === 0
             ? styles(theme).listEmpty
@@ -512,6 +502,7 @@ const styles = (theme: typeof Colors.light) =>
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
+      marginTop: Spacing.xl,
       paddingHorizontal: Spacing.xl,
       paddingTop: Spacing.xl,
       paddingBottom: Spacing.md,

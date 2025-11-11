@@ -19,7 +19,7 @@ const adUnitId = __DEV__
       android: "",
     }) || "";
 
-export function NativeAdComponent() {
+function NativeAdComponentInner() {
   const [nativeAd, setNativeAd] = useState<GoogleNativeAd | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -34,6 +34,7 @@ export function NativeAdComponent() {
     // Create and load native ad
     const loadAd = async () => {
       try {
+        console.log("[NativeAd] Loading ad...");
         ad = await GoogleNativeAd.createForAdRequest(adUnitId, {
           requestNonPersonalizedAdsOnly: true,
         });
@@ -42,7 +43,6 @@ export function NativeAdComponent() {
         console.log("[NativeAd] Headline:", ad.headline);
         console.log("[NativeAd] Body:", ad.body);
         console.log("[NativeAd] Advertiser:", ad.advertiser);
-        console.log("[NativeAd] CTA:", ad.callToAction);
 
         setNativeAd(ad);
         setIsLoaded(true);
@@ -56,6 +56,7 @@ export function NativeAdComponent() {
     // Cleanup
     return () => {
       if (ad) {
+        console.log("[NativeAd] Destroying ad");
         ad.destroy();
       }
     };
@@ -225,3 +226,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
+// Export memoized component to prevent unnecessary re-renders
+export const NativeAdComponent = React.memo(NativeAdComponentInner);
