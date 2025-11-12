@@ -88,5 +88,11 @@ export default ({ config }) => {
         projectId: "6126d0ae-3500-4209-aea9-b85db1b7880d",
       },
     },
+    updates: {
+      url: "https://u.expo.dev/6126d0ae-3500-4209-aea9-b85db1b7880d",
+    },
+    runtimeVersion: {
+      policy: "appVersion",
+    },
   };
 };
