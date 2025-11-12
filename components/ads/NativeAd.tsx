@@ -1,6 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
+import Constants from "expo-constants";
 
 // Google Mobile Ads Native Ad imports
 import {
@@ -15,7 +16,10 @@ import {
 const adUnitId = __DEV__
   ? TestIds.NATIVE
   : Platform.select({
-      ios: process.env.EXPO_PUBLIC_IOS_NATIVE || "",
+      ios:
+        Constants.expoConfig?.extra?.EXPO_PUBLIC_IOS_NATIVE_ID ||
+        process.env.EXPO_PUBLIC_IOS_NATIVE_ID ||
+        "",
       android: "",
     }) || "";
 
