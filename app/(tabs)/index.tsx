@@ -270,7 +270,11 @@ export default function HomeScreen() {
             {/* Today's Progress Card */}
             <View style={styles(theme).statCard}>
               <View style={styles(theme).statCardHeader}>
-                <Ionicons name="checkmark-done" size={20} color={theme.primary} />
+                <Ionicons
+                  name="checkmark-done"
+                  size={20}
+                  color={theme.primary}
+                />
                 <Text style={styles(theme).statCardTitle}>오늘의 완료율</Text>
               </View>
               <View style={styles(theme).statCardBody}>
@@ -294,9 +298,7 @@ export default function HomeScreen() {
         )}
 
         {/* Native Ad */}
-        <View style={styles(theme).nativeAdContainer}>
-          {memoizedAd}
-        </View>
+        <View style={styles(theme).nativeAdContainer}>{memoizedAd}</View>
 
         {/* Checklist Title */}
         {totalCount > 0 && (
