@@ -65,8 +65,7 @@ export default ({ config }) => {
       [
         "react-native-google-mobile-ads",
         {
-          androidAppId: "ca-app-pub-3940256099942544~3347511713",
-          iosAppId: process.env.EXPO_PUBLIC_GOOGLE_ADMOB_IOS_ID || "",
+          iosAppId: "ca-app-pub-4535163023491412~7650746573",
         },
       ],
       "expo-background-fetch",
