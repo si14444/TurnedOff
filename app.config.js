@@ -6,7 +6,7 @@
 export default ({ config }) => {
   return {
     ...config,
-    name: "아했나?",
+    name: "껐나?",
     slug: "TurnedOff",
     version: "1.0.0",
     orientation: "portrait",
